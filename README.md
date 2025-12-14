@@ -186,6 +186,8 @@ npm run sync:prod
 
 ### Netlify
 
+[![Netlify Status](https://api.netlify.com/api/v1/badges/d8c4d83d-7486-42de-844b-6f09986dc9aa/deploy-status)](https://app.netlify.com/projects/markdowncms/deploys)
+
 For detailed setup, see the [Convex Netlify Deployment Guide](https://docs.convex.dev/production/hosting/netlify).
 
 1. Deploy Convex functions to production:
