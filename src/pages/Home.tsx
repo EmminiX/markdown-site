@@ -8,7 +8,20 @@ const siteConfig = {
   title: "Real-time Site with Convex",
   // Optional logo/header image (place in public/images/, set to null to hide)
   logo: "/images/logo.svg" as string | null,
-  intro: `An open source markdown blog powered by Convex and deployed on Netlify. Fork it, customize it, ship it.`,
+  intro: (
+    <>
+      An open source markdown blog powered by Convex and deployed on Netlify.{" "}
+      <a
+        href="https://github.com/waynesutton/markdown-site"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="home-text-link"
+      >
+        Fork it
+      </a>
+      , customize it, ship it.
+    </>
+  ),
   bio: `Write in markdown, sync to a real-time database, and deploy in minutes. Built with React, TypeScript, and Convex for instant updates without rebuilds.`,
   featuredEssays: [
     { title: "Setup Guide", slug: "setup-guide" },
@@ -88,8 +101,15 @@ export default function Home() {
           >
             Netlify
           </a>
-          . Read the <a href={siteConfig.links.docs}>setup guide</a> to fork and
-          deploy your own.
+          . Read the{" "}
+          <a
+            href="https://github.com/waynesutton/markdown-site"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            project on GitHub
+          </a>{" "}
+          to fork and deploy your own.
         </p>
       </section>
     </div>

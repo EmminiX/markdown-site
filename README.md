@@ -198,13 +198,15 @@ npx convex deploy
 
 2. Connect your repository to Netlify
 3. Configure build settings:
-   - Build command: `npx convex deploy --cmd 'npm run build'`
+   - Build command: `npm ci --include=dev && npx convex deploy --cmd 'npm run build'`
    - Publish directory: `dist`
 4. Add environment variable:
    - `CONVEX_DEPLOY_KEY` - Generate from [Convex Dashboard](https://dashboard.convex.dev) > Project Settings > Deploy Key
 5. Update `netlify.toml` with your production Convex HTTP URL (replace `YOUR_CONVEX_DEPLOYMENT`)
 
 The `CONVEX_DEPLOY_KEY` lets Netlify automatically deploy functions and set `VITE_CONVEX_URL` on each build.
+
+**Build issues?** Netlify sets `NODE_ENV=production` which skips devDependencies. The `--include=dev` flag fixes this. See [netlify-deploy-fix.md](./netlify-deploy-fix.md) for detailed troubleshooting.
 
 ## Project Structure
 

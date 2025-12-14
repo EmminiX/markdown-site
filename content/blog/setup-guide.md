@@ -10,26 +10,48 @@ readTime: "8 min read"
 
 # Fork and Deploy Your Own Markdown Blog
 
-This guide walks you through forking this markdown blog, setting up your Convex backend, and deploying to Netlify. The entire process takes about 10 minutes.
+This guide walks you through forking [this markdown site](https://github.com/waynesutton/markdown-site), setting up your Convex backend, and deploying to Netlify. The entire process takes about 10 minutes.
 
 ## Table of Contents
 
-- [Prerequisites](#prerequisites)
-- [Step 1: Fork the Repository](#step-1-fork-the-repository)
-- [Step 2: Set Up Convex](#step-2-set-up-convex)
-- [Step 3: Sync Your Blog Posts](#step-3-sync-your-blog-posts)
-- [Step 4: Run Locally](#step-4-run-locally)
-- [Step 5: Get Your Convex HTTP URL](#step-5-get-your-convex-http-url)
-- [Step 6: Configure Netlify Redirects](#step-6-configure-netlify-redirects)
-- [Step 7: Deploy to Netlify](#step-7-deploy-to-netlify)
-- [Step 8: Set Up Production Convex](#step-8-set-up-production-convex)
-- [Writing Blog Posts](#writing-blog-posts)
-- [Adding Images](#adding-images)
-- [Customizing Your Blog](#customizing-your-blog)
-- [API Endpoints](#api-endpoints)
-- [Troubleshooting](#troubleshooting)
-- [Project Structure](#project-structure)
-- [Next Steps](#next-steps)
+- [Fork and Deploy Your Own Markdown Blog](#fork-and-deploy-your-own-markdown-blog)
+  - [Table of Contents](#table-of-contents)
+  - [Prerequisites](#prerequisites)
+  - [Step 1: Fork the Repository](#step-1-fork-the-repository)
+  - [Step 2: Set Up Convex](#step-2-set-up-convex)
+    - [Create a Convex Project](#create-a-convex-project)
+    - [Verify the Schema](#verify-the-schema)
+  - [Step 3: Sync Your Blog Posts](#step-3-sync-your-blog-posts)
+  - [Step 4: Run Locally](#step-4-run-locally)
+  - [Step 5: Get Your Convex HTTP URL](#step-5-get-your-convex-http-url)
+  - [Step 6: Configure Netlify Redirects](#step-6-configure-netlify-redirects)
+  - [Step 7: Deploy to Netlify](#step-7-deploy-to-netlify)
+    - [Option A: Netlify CLI](#option-a-netlify-cli)
+    - [Option B: Netlify Dashboard](#option-b-netlify-dashboard)
+    - [Netlify Build Configuration](#netlify-build-configuration)
+  - [Step 8: Set Up Production Convex](#step-8-set-up-production-convex)
+  - [Writing Blog Posts](#writing-blog-posts)
+    - [Frontmatter Fields](#frontmatter-fields)
+    - [Adding Images](#adding-images)
+    - [Sync After Adding Posts](#sync-after-adding-posts)
+    - [Environment Files](#environment-files)
+  - [Customizing Your Blog](#customizing-your-blog)
+    - [Change the Favicon](#change-the-favicon)
+    - [Change the Site Logo](#change-the-site-logo)
+    - [Change the Default Open Graph Image](#change-the-default-open-graph-image)
+    - [Update Site Configuration](#update-site-configuration)
+    - [Change the Default Theme](#change-the-default-theme)
+    - [Change the Font](#change-the-font)
+    - [Add Static Pages (Optional)](#add-static-pages-optional)
+    - [Update SEO Meta Tags](#update-seo-meta-tags)
+    - [Update llms.txt and robots.txt](#update-llmstxt-and-robotstxt)
+  - [API Endpoints](#api-endpoints)
+  - [Troubleshooting](#troubleshooting)
+    - [Posts not appearing](#posts-not-appearing)
+    - [RSS/Sitemap not working](#rsssitemap-not-working)
+    - [Build failures on Netlify](#build-failures-on-netlify)
+  - [Project Structure](#project-structure)
+  - [Next Steps](#next-steps)
 
 ## Prerequisites
 
@@ -194,13 +216,31 @@ npm run deploy
 2. Click "Add new site" then "Import an existing project"
 3. Connect your GitHub repository
 4. Configure build settings:
-   - Build command: `npx convex deploy --cmd 'npm run build'`
+   - Build command: `npm ci --include=dev && npx convex deploy --cmd 'npm run build'`
    - Publish directory: `dist`
 5. Add environment variables:
    - `CONVEX_DEPLOY_KEY`: Generate from [Convex Dashboard](https://dashboard.convex.dev) > Project Settings > Deploy Key
 6. Click "Deploy site"
 
 The `CONVEX_DEPLOY_KEY` allows Netlify to automatically deploy your Convex functions and set the correct `VITE_CONVEX_URL` on each build.
+
+### Netlify Build Configuration
+
+The `netlify.toml` file includes the correct build settings:
+
+```toml
+[build]
+  command = "npm ci --include=dev && npx convex deploy --cmd 'npm run build'"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "20"
+```
+
+Key points:
+- `npm ci --include=dev` forces devDependencies to install even when `NODE_ENV=production`
+- The build script uses `npx vite build` to resolve vite from node_modules
+- `@types/node` is required for TypeScript to recognize `process.env`
 
 ## Step 8: Set Up Production Convex
 
@@ -460,9 +500,39 @@ Your blog includes these API endpoints for search engines and AI:
 
 ### Build failures on Netlify
 
-1. Verify `VITE_CONVEX_URL` environment variable is set
-2. Check build logs for specific errors
-3. Ensure Node.js version is 18 or higher
+Common errors and fixes:
+
+**"vite: not found" or "Cannot find package 'vite'"**
+
+Netlify sets `NODE_ENV=production` which skips devDependencies. Fix by using `npm ci --include=dev` in your build command:
+
+```toml
+[build]
+  command = "npm ci --include=dev && npx convex deploy --cmd 'npm run build'"
+```
+
+Also ensure your build script uses `npx`:
+
+```json
+"build": "npx vite build"
+```
+
+**"Cannot find name 'process'"**
+
+Add `@types/node` to devDependencies:
+
+```bash
+npm install --save-dev @types/node
+```
+
+**General checklist:**
+
+1. Verify `CONVEX_DEPLOY_KEY` environment variable is set in Netlify
+2. Check that `@types/node` is in devDependencies
+3. Ensure Node.js version is 20 or higher
+4. Verify build command includes `--include=dev`
+
+See [netlify-deploy-fix.md](https://github.com/waynesutton/markdown-site/blob/main/netlify-deploy-fix.md) for detailed troubleshooting.
 
 ## Project Structure
 
