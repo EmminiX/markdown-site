@@ -1,10 +1,9 @@
 [build]
-  command = "npm ci && npx convex deploy --cmd 'npm run build'"
+  command = "npm ci --include=dev && npx convex deploy --cmd 'npm run build'"
   publish = "dist"
 
 [build.environment]
   NODE_VERSION = "20"
-  NPM_FLAGS = "--include=dev"
 
 # Convex HTTP endpoints
 # RSS feeds
