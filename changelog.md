@@ -4,6 +4,40 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [1.11.0] - 2025-12-20
+
+### Added
+
+- Aggregate component for efficient O(log n) stats counts
+  - Replaces O(n) table scans with pre-computed denormalized counts
+  - Uses `@convex-dev/aggregate` package for TableAggregate
+  - Three aggregates: totalPageViews, pageViewsByPath, uniqueVisitors
+- Backfill mutation for existing page view data
+  - `stats:backfillAggregates` populates counts from existing data
+  - Idempotent and safe to run multiple times
+
+### Changed
+
+- `recordPageView` mutation now updates aggregate components
+  - Inserts into pageViewsByPath aggregate for per-page counts
+  - Inserts into totalPageViews aggregate for global count
+  - Inserts into uniqueVisitors aggregate for new sessions only
+- `getStats` query now uses aggregate counts
+  - O(log n) count operations instead of O(n) table scans
+  - Consistent fast response times regardless of data size
+  - Still queries posts/pages for title matching
+
+### Technical
+
+- New file: `convex/convex.config.ts` (updated with aggregate component registrations)
+- Three TableAggregate instances with different namespacing strategies
+- Performance improvement scales better with growing page view data
+
+### Documentation
+
+- Updated `prds/howstatsworks.md` with old vs new implementation comparison
+- Added aggregate component usage examples and configuration
+
 ## [1.10.0] - 2025-12-20
 
 ### Added

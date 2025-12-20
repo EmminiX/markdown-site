@@ -1,5 +1,8 @@
 import { query, mutation, internalMutation } from "./_generated/server";
 import { v } from "convex/values";
+import { components } from "./_generated/api";
+import { DataModel } from "./_generated/dataModel";
+import { TableAggregate } from "@convex-dev/aggregate";
 
 // Deduplication window: 30 minutes in milliseconds
 const DEDUP_WINDOW_MS = 30 * 60 * 1000;
@@ -11,8 +14,49 @@ const SESSION_TIMEOUT_MS = 2 * 60 * 1000;
 const HEARTBEAT_DEDUP_MS = 10 * 1000;
 
 /**
+ * Aggregate for page views by path.
+ * Provides O(log n) counts instead of O(n) full table scans.
+ * Namespace by path to get per-page view counts efficiently.
+ */
+const pageViewsByPath = new TableAggregate<{
+  Namespace: string; // path
+  Key: number; // timestamp
+  DataModel: DataModel;
+  TableName: "pageViews";
+}>(components.pageViewsByPath, {
+  namespace: (doc) => doc.path,
+  sortKey: (doc) => doc.timestamp,
+});
+
+/**
+ * Aggregate for total page views.
+ * Key is null since we only need a global count.
+ */
+const totalPageViews = new TableAggregate<{
+  Key: null;
+  DataModel: DataModel;
+  TableName: "pageViews";
+}>(components.totalPageViews, {
+  sortKey: () => null,
+});
+
+/**
+ * Aggregate for unique visitors.
+ * Uses sessionId as key to count distinct sessions.
+ * Each session only counted once (first occurrence).
+ */
+const uniqueVisitors = new TableAggregate<{
+  Key: string; // sessionId
+  DataModel: DataModel;
+  TableName: "pageViews";
+}>(components.uniqueVisitors, {
+  sortKey: (doc) => doc.sessionId,
+});
+
+/**
  * Record a page view event.
  * Idempotent: same session viewing same path within 30min = 1 view.
+ * Updates aggregate components for efficient O(log n) counts.
  */
 export const recordPageView = mutation({
   args: {
@@ -39,13 +83,31 @@ export const recordPageView = mutation({
       return null;
     }
 
+    // Check if this is a new unique visitor (first page view for this session)
+    const existingSessionView = await ctx.db
+      .query("pageViews")
+      .withIndex("by_session_path", (q) => q.eq("sessionId", args.sessionId))
+      .first();
+    const isNewVisitor = !existingSessionView;
+
     // Insert new view event
-    await ctx.db.insert("pageViews", {
+    const id = await ctx.db.insert("pageViews", {
       path: args.path,
       pageType: args.pageType,
       sessionId: args.sessionId,
       timestamp: now,
     });
+    const doc = await ctx.db.get(id);
+
+    // Update aggregates with the new page view
+    if (doc) {
+      await pageViewsByPath.insertIfDoesNotExist(ctx, doc);
+      await totalPageViews.insertIfDoesNotExist(ctx, doc);
+      // Only insert into unique visitors aggregate if this is a new session
+      if (isNewVisitor) {
+        await uniqueVisitors.insertIfDoesNotExist(ctx, doc);
+      }
+    }
 
     return null;
   },
@@ -102,6 +164,7 @@ export const heartbeat = mutation({
 /**
  * Get all stats for the stats page.
  * Real-time subscription via useQuery.
+ * Uses aggregate components for O(log n) counts instead of O(n) table scans.
  */
 export const getStats = query({
   args: {},
@@ -147,24 +210,19 @@ export const getStats = query({
       .map(([path, count]) => ({ path, count }))
       .sort((a, b) => b.count - a.count);
 
-    // Get all page views ordered by timestamp to find earliest
-    const allViews = await ctx.db
+    // Use aggregate component for total page views count: O(log n) instead of O(n)
+    const totalPageViewsCount = await totalPageViews.count(ctx);
+
+    // Use aggregate component for unique visitors count: O(log n) instead of O(n)
+    const uniqueVisitorsCount = await uniqueVisitors.count(ctx);
+
+    // Get earliest page view for tracking since date (single doc fetch)
+    const firstView = await ctx.db
       .query("pageViews")
       .withIndex("by_timestamp")
       .order("asc")
-      .collect();
-
-    // Get tracking start date (earliest view timestamp)
-    const trackingSince = allViews.length > 0 ? allViews[0].timestamp : null;
-
-    // Aggregate views by path and count unique sessions
-    const viewsByPath: Record<string, number> = {};
-    const uniqueSessions = new Set<string>();
-
-    for (const view of allViews) {
-      viewsByPath[view.path] = (viewsByPath[view.path] || 0) + 1;
-      uniqueSessions.add(view.sessionId);
-    }
+      .first();
+    const trackingSince = firstView ? firstView.timestamp : null;
 
     // Get published posts and pages for titles
     const posts = await ctx.db
@@ -177,45 +235,58 @@ export const getStats = query({
       .withIndex("by_published", (q) => q.eq("published", true))
       .collect();
 
-    // Build page stats array with titles
-    const pageStats = Object.entries(viewsByPath)
-      .map(([path, views]) => {
-        // Match path to post or page
-        const slug = path.startsWith("/") ? path.slice(1) : path;
-        const post = posts.find((p) => p.slug === slug);
-        const page = pages.find((p) => p.slug === slug);
+    // Get unique paths from pageViews (needed to build pageStats)
+    // We still need to iterate for path list, but use aggregate for per-path counts
+    const allPaths = new Set<string>();
+    const pathViewsFromDb = await ctx.db.query("pageViews").collect();
+    for (const view of pathViewsFromDb) {
+      allPaths.add(view.path);
+    }
 
-        let title = path;
-        let pageType = "other";
+    // Build page stats using aggregate counts per path: O(log n) per path
+    const pageStatsPromises = Array.from(allPaths).map(async (path) => {
+      // Use aggregate namespace count for this path
+      const views = await pageViewsByPath.count(ctx, { namespace: path });
+      
+      // Match path to post or page for title
+      const slug = path.startsWith("/") ? path.slice(1) : path;
+      const post = posts.find((p) => p.slug === slug);
+      const page = pages.find((p) => p.slug === slug);
 
-        if (path === "/" || path === "") {
-          title = "Home";
-          pageType = "home";
-        } else if (path === "/stats") {
-          title = "Stats";
-          pageType = "stats";
-        } else if (post) {
-          title = post.title;
-          pageType = "blog";
-        } else if (page) {
-          title = page.title;
-          pageType = "page";
-        }
+      let title = path;
+      let pageType = "other";
 
-        return {
-          path,
-          title,
-          pageType,
-          views,
-        };
-      })
-      .sort((a, b) => b.views - a.views);
+      if (path === "/" || path === "") {
+        title = "Home";
+        pageType = "home";
+      } else if (path === "/stats") {
+        title = "Stats";
+        pageType = "stats";
+      } else if (post) {
+        title = post.title;
+        pageType = "blog";
+      } else if (page) {
+        title = page.title;
+        pageType = "page";
+      }
+
+      return {
+        path,
+        title,
+        pageType,
+        views,
+      };
+    });
+
+    const pageStats = (await Promise.all(pageStatsPromises)).sort(
+      (a, b) => b.views - a.views
+    );
 
     return {
       activeVisitors: activeSessions.length,
       activeByPath,
-      totalPageViews: allViews.length,
-      uniqueVisitors: uniqueSessions.size,
+      totalPageViews: totalPageViewsCount,
+      uniqueVisitors: uniqueVisitorsCount,
       publishedPosts: posts.length,
       publishedPages: pages.length,
       trackingSince,
@@ -244,6 +315,48 @@ export const cleanupStaleSessions = internalMutation({
     await Promise.all(staleSessions.map((session) => ctx.db.delete(session._id)));
 
     return staleSessions.length;
+  },
+});
+
+/**
+ * Internal mutation to backfill aggregates from existing pageViews data.
+ * Run this once after deploying the aggregate component to populate counts.
+ * Uses idempotent insertIfDoesNotExist so it's safe to run multiple times.
+ */
+export const backfillAggregates = internalMutation({
+  args: {},
+  returns: v.object({
+    processed: v.number(),
+    uniqueSessions: v.number(),
+  }),
+  handler: async (ctx) => {
+    // Get all page views
+    const allViews = await ctx.db.query("pageViews").collect();
+    
+    // Track unique sessions to avoid duplicate inserts
+    const seenSessions = new Set<string>();
+    let uniqueCount = 0;
+    
+    // Process each view and update aggregates
+    for (const doc of allViews) {
+      // Insert into pageViewsByPath aggregate (one per view)
+      await pageViewsByPath.insertIfDoesNotExist(ctx, doc);
+      
+      // Insert into totalPageViews aggregate (one per view)
+      await totalPageViews.insertIfDoesNotExist(ctx, doc);
+      
+      // Insert into uniqueVisitors aggregate (one per session)
+      if (!seenSessions.has(doc.sessionId)) {
+        seenSessions.add(doc.sessionId);
+        await uniqueVisitors.insertIfDoesNotExist(ctx, doc);
+        uniqueCount++;
+      }
+    }
+    
+    return {
+      processed: allViews.length,
+      uniqueSessions: uniqueCount,
+    };
   },
 });
 

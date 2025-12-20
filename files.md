@@ -76,11 +76,11 @@ A brief description of each file in the codebase.
 | `posts.ts`         | Queries and mutations for blog posts, view counts                    |
 | `pages.ts`         | Queries and mutations for static pages                               |
 | `search.ts`        | Full text search queries across posts and pages                      |
-| `stats.ts`         | Real-time stats queries, page view recording, session heartbeat      |
+| `stats.ts`         | Real-time stats with aggregate component for O(log n) counts, page view recording, session heartbeat |
 | `crons.ts`         | Cron job for stale session cleanup                                   |
 | `http.ts`          | HTTP endpoints: sitemap, API (update SITE_URL/SITE_NAME when forking) |
 | `rss.ts`           | RSS feed generation (update SITE_URL/SITE_TITLE when forking)        |
-| `convex.config.ts` | Convex app configuration                                             |
+| `convex.config.ts` | Convex app configuration with aggregate component registrations (pageViewsByPath, totalPageViews, uniqueVisitors) |
 | `tsconfig.json`    | Convex TypeScript configuration                                      |
 
 ### HTTP Endpoints (defined in `http.ts`)
