@@ -20,6 +20,14 @@ export interface VisitorMapConfig {
   title?: string; // Optional title above the map
 }
 
+// Inner page logo configuration
+// Shows the site logo in the header on blog page, individual posts, and pages
+// Does not affect the homepage logo (which is controlled separately)
+export interface InnerPageLogoConfig {
+  enabled: boolean; // Enable/disable logo on inner pages
+  size: number; // Logo size in pixels (applied as height)
+}
+
 // Blog page configuration
 // Controls whether posts appear on homepage, dedicated blog page, or both
 export interface BlogPageConfig {
@@ -60,6 +68,9 @@ export interface SiteConfig {
 
   // Visitor map configuration (stats page)
   visitorMap: VisitorMapConfig;
+
+  // Inner page logo configuration (blog page, posts, pages)
+  innerPageLogo: InnerPageLogoConfig;
 
   // Blog page configuration
   blogPage: BlogPageConfig;
@@ -142,6 +153,14 @@ export const siteConfig: SiteConfig = {
   visitorMap: {
     enabled: true, // Set to false to hide the visitor map
     title: "Live Visitors", // Optional title above the map
+  },
+
+  // Inner page logo configuration
+  // Shows logo on blog page, individual posts, and static pages
+  // Desktop: top left corner, Mobile: top right corner (small)
+  innerPageLogo: {
+    enabled: true, // Set to false to hide logo on inner pages
+    size: 28, // Logo height in pixels (keeps aspect ratio)
   },
 
   // Blog page configuration

@@ -9,8 +9,8 @@
    - 2xs: 11px  (code language labels, small badges)
    - xs:  12px  (descriptions, small text)
    - sm:  13px  (meta text, tags, secondary info)
-   - md:  14px  (navigation, buttons, labels)
-   - base: 16px (body text, default)
+   - md:  16px  (navigation, buttons, labels)
+   - base: 18px (body text, default)
    - lg:  17px  (blog content)
    - xl:  18px  (post description, h3)
    - 2xl: 20px  (h2 headings)
@@ -24,7 +24,7 @@
   --font-size-2xs: 11px;
   --font-size-xs: 12px;
   --font-size-sm: 13px;
-  --font-size-md: 14px;
+  --font-size-md: 16px;
   --font-size-base: 18px;
   --font-size-lg: 17px;
   --font-size-xl: 18px;
@@ -611,6 +611,55 @@ body {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 40px;
+}
+
+/* Inner page logo styles (blog page, posts, pages) */
+/* Desktop: logo first on the left, back button after */
+.inner-page-logo-link {
+  display: flex;
+  align-items: center;
+  order: 0;
+}
+
+.inner-page-logo {
+  width: auto;
+  display: block;
+  transition: opacity 0.2s ease;
+}
+
+.inner-page-logo-link:hover .inner-page-logo {
+  opacity: 0.7;
+}
+
+/* Nav layout adjustments for logo */
+.post-nav .back-button {
+  order: 1;
+  margin-left: 16px;
+}
+
+.post-nav .copy-page-dropdown {
+  order: 2;
+  margin-left: auto;
+}
+
+/* Mobile: logo on left, back button position unchanged */
+@media (max-width: 768px) {
+  .inner-page-logo-link {
+    order: 0;
+  }
+
+  .inner-page-logo {
+    height: 24px !important; /* Smaller on mobile to keep header compact */
+  }
+
+  .post-nav .back-button {
+    margin-left: 12px;
+  }
+
+  .post-nav .copy-page-dropdown {
+    order: 2;
+    margin-left: auto;
+  }
 }
 
 /* Shift CopyPageDropdown 7px to the left for sidebar layouts */

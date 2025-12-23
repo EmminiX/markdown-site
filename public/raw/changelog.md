@@ -11,20 +11,28 @@ All notable changes to this project.
 
 Released December 23, 2025
 
-**Mobile menu improvements**
+**Mobile menu redesign with sidebar integration**
 
-- Mobile menu now includes search and theme toggle
-  - Header controls moved from top navigation to mobile menu drawer
-  - Easier access to search and theme switching on mobile devices
-  - Desktop navigation unchanged
+- Mobile navigation controls moved to left side
+  - Hamburger menu, search, and theme toggle now positioned on the left
+  - Order: hamburger first, then search, then theme toggle
+  - Consistent left-aligned navigation on mobile devices
 
 - Sidebar table of contents in mobile menu
-  - When a page or post uses sidebar layout, the TOC appears in the mobile menu
-  - Page sidebar hidden on mobile to avoid duplication
-  - All sidebar features work: collapsible sections, active heading highlighting, smooth scroll navigation
-  - Sidebar remains visible on tablet for better UX
+  - When a page or blog post has sidebar layout, the TOC appears in the mobile menu
+  - Desktop sidebar hidden on mobile (max-width: 768px) since accessible via hamburger
+  - Back button and CopyPageDropdown remain visible above main content on mobile
+  - Sidebar headings displayed with same collapsible tree structure as desktop
 
-Updated files: `src/context/SidebarContext.tsx`, `src/components/MobileMenu.tsx`, `src/components/Layout.tsx`, `src/pages/Post.tsx`, `src/pages/Home.tsx`, `src/pages/Blog.tsx`, `src/pages/Stats.tsx`, `src/pages/Write.tsx`, `src/styles/global.css`
+- Typography standardization
+  - All mobile menu elements use CSS variables for font sizes
+  - Font-family standardized using `inherit` to match body font
+  - Mobile menu TOC links use consistent sizing with desktop sidebar
+  - Added CSS variables: `--font-size-mobile-toc-title` and `--font-size-mobile-toc-link`
+
+New files: `src/context/SidebarContext.tsx`
+
+Updated files: `src/components/Layout.tsx`, `src/components/MobileMenu.tsx`, `src/pages/Post.tsx`, `src/styles/global.css`
 
 ## v1.24.1
 
