@@ -8,6 +8,21 @@ layout: "sidebar"
 
 All notable changes to this project.
 
+## v1.28.2
+
+Released December 25, 2025
+
+**Plain text code block wrapping**
+
+- Code blocks without a language specifier now wrap text properly
+- Fixed horizontal overflow for long error messages and prose in code blocks
+- Updated inline vs block code detection logic
+  - Inline code: short content (< 80 chars), no newlines, no language class
+  - Block code: longer content or has language specifier
+- Text wrapping uses `pre-wrap` styling applied via SyntaxHighlighter props
+
+Updated files: `src/components/BlogPost.tsx`, `src/styles/global.css`
+
 ## v1.28.1
 
 Released December 25, 2025

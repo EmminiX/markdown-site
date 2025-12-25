@@ -307,27 +307,55 @@ export default function BlogPost({ content }: BlogPostProps) {
         remarkPlugins={[remarkGfm, remarkBreaks]}
         rehypePlugins={[rehypeRaw, [rehypeSanitize, sanitizeSchema]]}
         components={{
-          code({ className, children, ...props }) {
+          code(codeProps) {
+            const { className, children, node, style, ...restProps } = codeProps as {
+              className?: string;
+              children?: React.ReactNode;
+              node?: { tagName?: string; properties?: { className?: string[] } };
+              style?: React.CSSProperties;
+              inline?: boolean;
+            };
             const match = /language-(\w+)/.exec(className || "");
-            const isInline = !match && !className;
+            
+            // Detect inline code: no language class AND content is short without newlines
+            // Fenced code blocks (even without language) are longer or have structure
+            const codeContent = String(children);
+            const hasNewlines = codeContent.includes('\n');
+            const isShort = codeContent.length < 80;
+            const hasLanguage = !!match || !!className;
+            
+            // It's inline only if: no language, short content, no newlines
+            const isInline = !hasLanguage && isShort && !hasNewlines;
 
             if (isInline) {
               return (
-                <code className="inline-code" {...props}>
+                <code className="inline-code" style={style} {...restProps}>
                   {children}
                 </code>
               );
             }
 
             const codeString = String(children).replace(/\n$/, "");
+            const language = match ? match[1] : "text";
+            const isTextBlock = language === "text";
+            
+            // Custom styles for text blocks to enable wrapping
+            const textBlockStyle = isTextBlock ? {
+              whiteSpace: "pre-wrap" as const,
+              wordWrap: "break-word" as const,
+              overflowWrap: "break-word" as const,
+            } : {};
+            
             return (
-              <div className="code-block-wrapper">
+              <div className={`code-block-wrapper ${isTextBlock ? "code-block-text" : ""}`}>
                 {match && <span className="code-language">{match[1]}</span>}
                 <CodeCopyButton code={codeString} />
                 <SyntaxHighlighter
                   style={getCodeTheme()}
-                  language={match ? match[1] : "text"}
+                  language={language}
                   PreTag="div"
+                  customStyle={textBlockStyle}
+                  codeTagProps={isTextBlock ? { style: textBlockStyle } : undefined}
                 >
                   {codeString}
                 </SyntaxHighlighter>

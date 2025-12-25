@@ -8,10 +8,13 @@
 
 ## Current Status
 
-v1.28.1 ready. Fixed RSS feed validation errors by standardizing all URLs to www.markdown.fast.
+v1.28.2 ready. Fixed text wrapping for plain text code blocks.
 
 ## Completed
 
+- [x] Plain text code blocks now wrap text properly instead of horizontal overflow
+- [x] Updated inline vs block code detection logic in BlogPost.tsx
+- [x] Added `pre-wrap` styling for text blocks via SyntaxHighlighter props
 - [x] RSS feed validation errors fixed by standardizing URLs to www.markdown.fast
 - [x] Updated index.html meta tags (og:url, og:image, twitter:domain, twitter:url, twitter:image, JSON-LD)
 - [x] Updated convex/rss.ts and convex/http.ts SITE_URL constants

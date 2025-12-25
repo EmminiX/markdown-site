@@ -4,6 +4,23 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [1.28.2] - 2025-12-25
+
+### Fixed
+
+- Plain text code blocks now wrap text properly
+  - Code blocks without a language specifier were causing horizontal overflow
+  - Updated detection logic to distinguish inline code from block code
+  - Inline code: short content (< 80 chars), no newlines, no language
+  - Block code: longer content or has language specifier
+  - Text block wrapping uses `pre-wrap` styling via SyntaxHighlighter `customStyle` and `codeTagProps`
+  - Long error messages and prose in code blocks now display correctly
+
+### Technical
+
+- Updated `src/components/BlogPost.tsx`: New detection logic for inline vs block code, added `textBlockStyle` with wrapping properties
+- Updated `src/styles/global.css`: Added `.code-block-text` class for CSS fallback wrapping
+
 ## [1.28.1] - 2025-12-25
 
 ### Fixed

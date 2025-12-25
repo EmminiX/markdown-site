@@ -1388,6 +1388,14 @@ body {
   margin: 24px 0;
 }
 
+/* Allow text wrapping for plain text code blocks */
+.code-block-text pre,
+.code-block-text code {
+  white-space: pre-wrap !important;
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
+}
+
 .code-language {
   position: absolute;
   top: 8px;

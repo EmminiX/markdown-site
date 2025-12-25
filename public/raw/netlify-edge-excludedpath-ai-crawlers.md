@@ -27,6 +27,10 @@ The goal: AI services fetch `/raw/{slug}.md` and parse clean markdown without HT
 I attempted to load and read the raw markdown at the URL you provided but was unable to fetch the content from that link. The page could not be loaded directly and I cannot access its raw markdown.
 ```
 
+```
+The page could not be loaded with the tools currently available, so its raw markdown content is not accessible.
+```
+
 **Perplexity:**
 
 ```
@@ -89,8 +93,14 @@ Added explicit bypass for known AI user agents:
 
 ```typescript
 const AI_CRAWLERS = [
-  "gptbot", "chatgpt", "chatgpt-user", "oai-searchbot",
-  "claude-web", "claudebot", "anthropic", "perplexitybot"
+  "gptbot",
+  "chatgpt",
+  "chatgpt-user",
+  "oai-searchbot",
+  "claude-web",
+  "claudebot",
+  "anthropic",
+  "perplexitybot",
 ];
 
 if (isAICrawler(userAgent)) {
@@ -112,7 +122,7 @@ exports.handler = async (event) => {
   return {
     statusCode: 200,
     headers: { "Content-Type": "text/plain; charset=utf-8" },
-    body: markdownContent
+    body: markdownContent,
   };
 };
 ```
