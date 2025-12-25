@@ -8,9 +8,19 @@
 
 ## Current Status
 
-v1.28.2 ready. Fixed text wrapping for plain text code blocks.
+v1.29.0 ready. Added font family configuration system with monospace option.
 
 ## Completed
+
+- [x] Font family configuration system with siteConfig integration
+- [x] Added FontContext.tsx for global font state management
+- [x] Monospace font option added to FONT SWITCHER (IBM Plex Mono)
+- [x] CSS variable --font-family for dynamic font updates
+- [x] Write page font switcher updated to support serif/sans/monospace
+- [x] Fork configuration support for fontFamily option
+- [x] Documentation updated (setup-guide.md, docs.md)
+- [x] Font preference persistence with localStorage
+- [x] SiteConfig default font detection and override logic
 
 - [x] Plain text code blocks now wrap text properly instead of horizontal overflow
 - [x] Updated inline vs block code detection logic in BlogPost.tsx

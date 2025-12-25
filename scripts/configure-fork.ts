@@ -72,6 +72,7 @@ interface ForkConfig {
   featuredViewMode?: "cards" | "list";
   showViewToggle?: boolean;
   theme?: "dark" | "light" | "tan" | "cloud";
+  fontFamily?: "serif" | "sans" | "monospace";
 }
 
 // Get project root directory
@@ -249,6 +250,14 @@ function updateSiteConfig(config: ForkConfig): void {
     content = content.replace(
       /showOnBlogPage: (?:true|false),\s*\/\/ Show post list on \/blog page/,
       `showOnBlogPage: ${config.postsDisplay.showOnBlogPage}, // Show post list on /blog page`,
+    );
+  }
+
+  // Update fontFamily if specified
+  if (config.fontFamily) {
+    content = content.replace(
+      /fontFamily: ['"](?:serif|sans|monospace)['"],\s*\/\/ Options: "serif", "sans", or "monospace"/,
+      `fontFamily: "${config.fontFamily}", // Options: "serif", "sans", or "monospace"`,
     );
   }
 

@@ -75,6 +75,11 @@ export interface GitHubRepoConfig {
   contentPath: string; // Path to raw markdown files (e.g., "public/raw")
 }
 
+// Font family configuration
+// Controls the default font family for the entire site
+// default font family options: "serif" (New York), "sans" (system fonts), "monospace" (IBM Plex Mono)
+export type FontFamily = "serif" | "sans" | "monospace";
+
 // Site configuration interface
 export interface SiteConfig {
   // Basic site info
@@ -83,6 +88,9 @@ export interface SiteConfig {
   logo: string | null;
   intro: ReactNode;
   bio: string;
+
+  // Font family configuration
+  fontFamily: FontFamily;
 
   // Featured section configuration
   featuredViewMode: "cards" | "list";
@@ -130,6 +138,10 @@ export const siteConfig: SiteConfig = {
   logo: "/images/logo.svg",
   intro: null, // Set in Home.tsx to allow JSX with links
   bio: `Your content is instantly available to browsers, LLMs, and AI agents.`,
+
+  // Font family configuration
+  // Options: "serif" (New York), "sans" (system fonts), "monospace" (IBM Plex Mono)
+  fontFamily: "sans",
 
   // Featured section configuration
   // viewMode: 'list' shows bullet list, 'cards' shows card grid with excerpts
@@ -234,7 +246,7 @@ export const siteConfig: SiteConfig = {
   postsDisplay: {
     showOnHome: true, // Show post list on homepage
     showOnBlogPage: true, // Show post list on /blog page
-    homePostsLimit: 10, // Limit number of posts on homepage (undefined = show all)
+    homePostsLimit: 5, // Limit number of posts on homepage (undefined = show all)
     homePostsReadMore: {
       enabled: true, // Show "read more" link when posts are limited
       text: "Read more blog posts", // Customizable link text

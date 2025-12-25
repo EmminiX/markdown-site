@@ -49,6 +49,7 @@
   },
   "featuredViewMode": "cards",
   "showViewToggle": true,
-  "theme": "tan"
+  "theme": "tan",
+  "fontFamily": "serif"
 }
 

@@ -4,6 +4,39 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [1.29.0] - 2025-12-25
+
+### Added
+
+- Font family configuration system
+  - Added `fontFamily` option to `siteConfig.ts` with three options: "serif" (New York), "sans" (system fonts), "monospace" (IBM Plex Mono)
+  - Created `FontContext.tsx` for global font state management with localStorage persistence
+  - Font preference persists across page reloads
+  - SiteConfig default font is respected and overrides localStorage when siteConfig changes
+  - CSS variable `--font-family` dynamically updates based on selected font
+- Monospace font option
+  - Added monospace font family to FONT SWITCHER options in `global.css`
+  - Monospace uses "IBM Plex Mono", "Liberation Mono", ui-monospace, monospace
+  - Write page font switcher now supports all three font options (serif/sans/monospace)
+- Fork configuration support for fontFamily
+  - Added `fontFamily` field to `fork-config.json.example`
+  - Updated `configure-fork.ts` to handle fontFamily configuration
+
+### Changed
+
+- `src/styles/global.css`: Updated body font-family to use CSS variable `--font-family` with fallback
+- `src/main.tsx`: Added FontProvider wrapper around app
+- `src/pages/Write.tsx`: Updated font switcher to cycle through serif/sans/monospace options
+- `content/blog/setup-guide.md`: Updated font configuration documentation with siteConfig option
+- `content/pages/docs.md`: Updated font configuration documentation
+
+### Technical
+
+- New context: `src/context/FontContext.tsx` with `useFont()` hook
+- Font detection logic compares siteConfig default with localStorage to detect changes
+- CSS variable updates synchronously on mount for immediate font application
+- Write page font state syncs with global font on initial load
+
 ## [1.28.2] - 2025-12-25
 
 ### Fixed

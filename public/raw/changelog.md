@@ -6,6 +6,7 @@ Date: 2025-12-25
 ---
 
 All notable changes to this project.
+![](https://img.shields.io/badge/License-MIT-yellow.svg)
 
 ## v1.28.2
 

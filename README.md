@@ -1,5 +1,11 @@
 # markdown "sync" framework
 
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue.svg)
+![React](https://img.shields.io/badge/React-18-61dafb.svg)
+![Convex](https://img.shields.io/badge/Convex-enabled-ff6b6b.svg)
+![Netlify](https://img.shields.io/badge/Netlify-hosted-00C7B7.svg)
+
 An open-source publishing framework built for AI agents and developers to ship websites, docs, or blogs. Write markdown, sync from the terminal. Your content is instantly available to browsers, LLMs, and AI agents. Built on Convex and Netlify.
 
 Write markdown locally, run `npm run sync` (dev) or `npm run sync:prod` (production), and content appears instantly across all connected browsers. Built with React, Convex, and Vite. Optimized for AEO, GEO, and LLM discovery.

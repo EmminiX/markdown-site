@@ -33,7 +33,7 @@ A brief description of each file in the codebase.
 
 | File            | Description                                                                                               |
 | --------------- | --------------------------------------------------------------------------------------------------------- |
-| `siteConfig.ts` | Centralized site configuration (name, logo, blog page, posts display with homepage post limit and read more link, GitHub contributions, nav order, inner page logo settings, hardcoded navigation items for React routes, GitHub repository config for AI service raw URLs) |
+| `siteConfig.ts` | Centralized site configuration (name, logo, blog page, posts display with homepage post limit and read more link, GitHub contributions, nav order, inner page logo settings, hardcoded navigation items for React routes, GitHub repository config for AI service raw URLs, font family configuration) |
 
 ### Pages (`src/pages/`)
 
@@ -44,7 +44,7 @@ A brief description of each file in the codebase.
 | `Post.tsx`  | Individual blog post or page view with optional sidebar layout. Includes back button, CopyPageDropdown, tag links, and related posts section in footer for blog posts (update SITE_URL/SITE_NAME when forking) |
 | `Stats.tsx` | Real-time analytics dashboard with visitor stats and GitHub stars |
 | `TagPage.tsx` | Tag archive page displaying posts filtered by a specific tag. Includes view mode toggle (list/cards) with localStorage persistence |
-| `Write.tsx` | Three-column markdown writing page with Cursor docs-style UI, frontmatter reference with copy buttons, theme toggle, font switcher (serif/sans-serif), and localStorage persistence (not linked in nav) |
+| `Write.tsx` | Three-column markdown writing page with Cursor docs-style UI, frontmatter reference with copy buttons, theme toggle, font switcher (serif/sans/monospace), and localStorage persistence (not linked in nav) |
 
 ### Components (`src/components/`)
 
@@ -69,6 +69,7 @@ A brief description of each file in the codebase.
 | File               | Description                                          |
 | ------------------ | ---------------------------------------------------- |
 | `ThemeContext.tsx` | Theme state management with localStorage persistence |
+| `FontContext.tsx` | Font family state management (serif/sans/monospace) with localStorage persistence and siteConfig integration |
 | `SidebarContext.tsx` | Shares sidebar headings and active ID between Post and Layout components for mobile menu integration |
 
 ### Utils (`src/utils/`)

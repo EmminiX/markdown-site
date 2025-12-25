@@ -932,7 +932,22 @@ const DEFAULT_THEME: Theme = "tan"; // Options: "dark", "light", "tan", "cloud"
 
 ### Change the Font
 
-The blog uses a serif font by default. To switch to sans-serif, edit `src/styles/global.css`:
+The blog uses a serif font by default. You can configure the font in two ways:
+
+**Option 1: Configure via siteConfig.ts (Recommended)**
+
+Edit `src/config/siteConfig.ts`:
+
+```typescript
+export const siteConfig: SiteConfig = {
+  // ... other config
+  fontFamily: "serif", // Options: "serif", "sans", or "monospace"
+};
+```
+
+**Option 2: Edit global.css directly**
+
+Edit `src/styles/global.css`:
 
 ```css
 body {
@@ -947,8 +962,20 @@ body {
     ui-serif,
     Georgia,
     serif;
+
+  /* Monospace */
+  font-family:
+    "IBM Plex Mono",
+    "Liberation Mono",
+    ui-monospace,
+    monospace;
 }
 ```
+
+Available font options:
+- `serif`: New York serif font (default)
+- `sans`: System sans-serif fonts
+- `monospace`: IBM Plex Mono monospace font
 
 ### Change Font Sizes
 

@@ -627,7 +627,16 @@ const DEFAULT_THEME: Theme = "tan";
 
 ### Font
 
-Edit `src/styles/global.css`:
+Configure the font in `src/config/siteConfig.ts`:
+
+```typescript
+export const siteConfig: SiteConfig = {
+  // ... other config
+  fontFamily: "serif", // Options: "serif", "sans", or "monospace"
+};
+```
+
+Or edit `src/styles/global.css` directly:
 
 ```css
 body {
@@ -637,8 +646,13 @@ body {
 
   /* Serif (default) */
   font-family: "New York", ui-serif, Georgia, serif;
+
+  /* Monospace */
+  font-family: "IBM Plex Mono", "Liberation Mono", ui-monospace, monospace;
 }
 ```
+
+Available options: `serif` (default), `sans`, or `monospace`.
 
 ### Font Sizes
 

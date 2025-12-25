@@ -13,6 +13,7 @@ import {
 import { Moon, Sun, Cloud } from "lucide-react";
 import { Half2Icon } from "@radix-ui/react-icons";
 import { useTheme } from "../context/ThemeContext";
+import { useFont } from "../context/FontContext";
 
 // Frontmatter field definitions for blog posts
 const POST_FIELDS = [
@@ -121,11 +122,12 @@ const STORAGE_KEY_TYPE = "markdown_write_type";
 const STORAGE_KEY_FONT = "markdown_write_font";
 
 // Font family definitions (matches global.css options)
-type FontType = "serif" | "sans";
-const FONTS: Record<FontType, string> = {
+// Note: Write page uses its own font state for local editing, but respects global font on mount
+const FONTS: Record<"serif" | "sans" | "monospace", string> = {
   serif:
     '"New York", -apple-system-ui-serif, ui-serif, Georgia, Cambria, "Times New Roman", Times, serif',
   sans: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif',
+  monospace: '"IBM Plex Mono", "Liberation Mono", ui-monospace, monospace',
 };
 
 // Get the appropriate icon for current theme (matches ThemeToggle.tsx)
@@ -146,11 +148,12 @@ function getThemeIcon(theme: string) {
 
 export default function Write() {
   const { theme, toggleTheme } = useTheme();
+  const { fontFamily: globalFont } = useFont();
   const [contentType, setContentType] = useState<"post" | "page">("post");
   const [content, setContent] = useState("");
   const [copied, setCopied] = useState(false);
   const [copiedField, setCopiedField] = useState<string | null>(null);
-  const [font, setFont] = useState<FontType>("serif");
+  const [font, setFont] = useState<"serif" | "sans" | "monospace">("serif");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   // Load from localStorage on mount
@@ -160,7 +163,11 @@ export default function Write() {
       | "post"
       | "page"
       | null;
-    const savedFont = localStorage.getItem(STORAGE_KEY_FONT) as FontType | null;
+    const savedFont = localStorage.getItem(STORAGE_KEY_FONT) as
+      | "serif"
+      | "sans"
+      | "monospace"
+      | null;
 
     if (savedContent) {
       setContent(savedContent);
@@ -172,10 +179,17 @@ export default function Write() {
       setContentType(savedType);
     }
 
-    if (savedFont && (savedFont === "serif" || savedFont === "sans")) {
+    // Use saved font preference, or fall back to global font, or default to serif
+    if (
+      savedFont &&
+      (savedFont === "serif" || savedFont === "sans" || savedFont === "monospace")
+    ) {
       setFont(savedFont);
+    } else {
+      // Sync with global font on first load
+      setFont(globalFont);
     }
-  }, []);
+  }, [globalFont]);
 
   // Save to localStorage on content change
   useEffect(() => {
@@ -192,9 +206,13 @@ export default function Write() {
     localStorage.setItem(STORAGE_KEY_FONT, font);
   }, [font]);
 
-  // Toggle font between serif and sans-serif
+  // Toggle font between serif, sans-serif, and monospace
   const toggleFont = useCallback(() => {
-    setFont((prev) => (prev === "serif" ? "sans" : "serif"));
+    setFont((prev) => {
+      if (prev === "serif") return "sans";
+      if (prev === "sans") return "monospace";
+      return "serif";
+    });
   }, []);
 
   // Handle type change and update content template
@@ -311,7 +329,13 @@ export default function Write() {
             </button>
             <button onClick={toggleFont} className="write-nav-item">
               <TextAa size={18} />
-              <span>{font === "serif" ? "Serif" : "Sans"}</span>
+              <span>
+                {font === "serif"
+                  ? "Serif"
+                  : font === "sans"
+                    ? "Sans"
+                    : "Monospace"}
+              </span>
             </button>
           </div>
         </nav>
