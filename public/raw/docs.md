@@ -163,10 +163,48 @@ Content here...
 | `newsletter`       | No       | Override newsletter signup display (`true` to show, `false` to hide)                                                                                                                                   |
 | `contactForm`      | No       | Enable contact form on this page                                                                                                                                                                       |
 | `showImageAtTop`   | No       | Set `true` to display the `image` field at the top of the page above the header (default: `false`)                                                                                                     |
+| `textAlign`        | No       | Text alignment: "left" (default), "center", or "right". Used by `home.md` for home intro alignment                                                                                                     |
 
 **Hide pages from navigation:** Set `showInNav: false` to keep a page published and accessible via direct URL, but hidden from the navigation menu. Pages with `showInNav: false` remain searchable and available via API endpoints. Useful for pages you want to link directly but not show in the main nav.
 
 **Show image at top:** Add `showImageAtTop: true` to display the `image` field at the top of the post/page above the header. Default behavior: if `showImageAtTop` is not set or `false`, image only used for Open Graph previews and featured card thumbnails.
+
+**Text alignment:** Use `textAlign` field to control text alignment for page content. Options: `"left"` (default), `"center"`, or `"right"`. Used by `home.md` to control home intro alignment.
+
+### Home intro content
+
+The homepage intro text can be synced from markdown via `content/pages/home.md` (slug: `home-intro`). This allows you to update homepage text without redeploying.
+
+**Create home intro:**
+
+1. Create `content/pages/home.md`:
+
+```markdown
+---
+title: "Home Intro"
+slug: "home-intro"
+published: true
+showInNav: false
+order: -1
+textAlign: "left"
+---
+
+Your homepage intro text here.
+
+## Features
+
+**Feature one** — Description here.
+
+**Feature two** — Description here.
+```
+
+2. Run `npm run sync` to sync to Convex
+
+3. Content appears on homepage instantly (no rebuild needed)
+
+**Blog heading styles:** Headings (h1-h6) in home intro content use the same styling as blog posts (`blog-h1` through `blog-h6` classes). Each heading gets an automatic ID and a clickable anchor link (#) that appears on hover. Lists, blockquotes, horizontal rules, and links also use blog styling classes for consistent typography.
+
+**Fallback:** If `home-intro` page is not found, the homepage falls back to `siteConfig.bio` text.
 
 ### Sidebar layout
 

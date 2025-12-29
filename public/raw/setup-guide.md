@@ -1071,6 +1071,8 @@ Pages appear automatically in the navigation when published.
 
 **Hide pages from navigation:** Set `showInNav: false` in page frontmatter to keep a page published and accessible via direct URL, but hidden from the navigation menu. Useful for pages like `/projects` that you want to link directly but not show in the main nav. Pages with `showInNav: false` remain searchable and available via API endpoints.
 
+**Home intro content:** Create `content/pages/home.md` (slug: `home-intro`) to sync homepage intro text from markdown. Headings (h1-h6) use blog post styling (`blog-h1` through `blog-h6`) with clickable anchor links. Lists, blockquotes, horizontal rules, and links also use blog styling for consistent typography. Set `textAlign: "left"`, `"center"`, or `"right"` to control alignment. Run `npm run sync` to update homepage text instantly without redeploying. Falls back to `siteConfig.bio` if `home-intro` page not found.
+
 **Sidebar layout:** Add `layout: "sidebar"` to any post or page frontmatter to enable a docs-style layout with a table of contents sidebar. The sidebar extracts headings (H1, H2, H3) automatically and provides smooth scroll navigation. Only appears if headings exist in the content.
 
 **Right sidebar:** When enabled in `siteConfig.rightSidebar.enabled`, posts and pages can display a right sidebar containing the CopyPageDropdown at 1135px+ viewport width. Add `rightSidebar: true` to frontmatter to enable. Without this field, pages render normally with CopyPageDropdown in the nav bar. When enabled, CopyPageDropdown moves from the navigation bar to the right sidebar on wide screens. The right sidebar is hidden below 1135px, and CopyPageDropdown returns to the nav bar automatically.

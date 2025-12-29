@@ -169,7 +169,7 @@ Markdown files with frontmatter for blog posts. Each file becomes a blog post.
 Markdown files for static pages like About, Projects, Contact, Changelog.
 
 **Special pages:**
-- `home.md` (slug: `home-intro`): Homepage intro/bio content. Set `showInNav: false` to hide from navigation. Content syncs with `npm run sync` and displays on the homepage without redeploy.
+- `home.md` (slug: `home-intro`): Homepage intro/bio content. Set `showInNav: false` to hide from navigation. Content syncs with `npm run sync` and displays on the homepage without redeploy. Headings (h1-h6) use blog post styling (`blog-h1` through `blog-h6`) with clickable anchor links. Lists, blockquotes, horizontal rules, and links also use blog styling classes for consistent typography.
 
 | Field           | Description                                                             |
 | --------------- | ----------------------------------------------------------------------- |

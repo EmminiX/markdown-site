@@ -1040,6 +1040,7 @@ Replace example content in:
 | ------------------------------ | -------------------------- |
 | `content/blog/*.md`            | Blog posts                 |
 | `content/pages/*.md`           | Static pages (About, etc.) |
+| `content/pages/home.md`        | Homepage intro content (slug: `home-intro`, uses blog heading styles) |
 | `public/images/logo.svg`       | Site logo                  |
 | `public/images/og-default.svg` | Default social share image |
 | `public/images/logos/*.svg`    | Logo gallery images        |
