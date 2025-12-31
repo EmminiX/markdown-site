@@ -7,9 +7,16 @@
 
 ## Current Status
 
-v2.1.0 ready. CLAUDE.md and Claude skills documentation complete. Created CLAUDE.md in root for Claude Code instructions, .claude/skills/ directory with three focused skill files (frontmatter.md, convex.md, sync.md), and updated sync-discovery-files.ts to automatically update CLAUDE.md during sync. Documentation updated in files.md, changelog.md, changelog-page.md, and TASK.md.
+v2.2.0 ready. Footer content via markdown page complete. Created `content/pages/footer.md` for managing footer content via markdown sync. Footer content syncs with `npm run sync` without redeploy needed. Falls back to `siteConfig.footer.defaultContent` when page not found. Documentation updated in files.md, changelog.md, changelog-page.md, FORK_CONFIG.md, docs.md, setup-guide.md, and TASK.md.
 
 ## Completed
+
+- [x] Footer content via markdown page (footer.md)
+  - [x] Created `content/pages/footer.md` for managing footer content via markdown sync
+  - [x] Footer content syncs with `npm run sync` without redeploy needed
+  - [x] Falls back to `siteConfig.footer.defaultContent` when page not found
+  - [x] Updated Home.tsx and Blog.tsx to fetch footer page by slug
+  - [x] Updated files.md, changelog.md, changelog-page.md, FORK_CONFIG.md with documentation
 
 - [x] CLAUDE.md and Claude skills documentation
   - [x] Created CLAUDE.md in root with project instructions for Claude Code

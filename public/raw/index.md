@@ -4,7 +4,7 @@ This is the homepage index of all published content.
 
 ## Blog Posts (18)
 
-- **[How I added WorkOS to my Convex app with Cursor](/raw/how-i-added-workos-with-cursor.md)** - A timeline of adding WorkOS AuthKit authentication to my markdown blog dashboard using Cursor, prompt engineering, and vibe coding. From PRD import to published feature.
+- **[How I added WorkOS to my Convex app with Cursor](/raw/workos-with-convex-cursor.md)** - A timeline of adding WorkOS AuthKit authentication to my markdown blog dashboard using Cursor, prompt engineering, and vibe coding. From PRD import to published feature.
   - Date: 2025-12-30 | Reading time: 8 min read | Tags: cursor, workos, convex, prompt-engineering, ai-coding
 - **[How to setup WorkOS with Markdown Sync](/raw/how-to-setup-workos.md)** - Step-by-step guide to configure WorkOS AuthKit authentication for your markdown blog dashboard. WorkOS is optional and can be enabled in siteConfig.ts.
   - Date: 2025-12-29 | Reading time: 10 min read | Tags: workos, authentication, tutorial, dashboard
@@ -41,8 +41,9 @@ This is the homepage index of all published content.
 - **[Using Images in Blog Posts](/raw/using-images-in-posts.md)** - Learn how to add header images, inline images, and Open Graph images to your markdown posts.
   - Date: 2025-12-14 | Reading time: 4 min read | Tags: images, tutorial, markdown, open-graph
 
-## Pages (7)
+## Pages (8)
 
+- **[Footer](/raw/footer.md)**
 - **[Home Intro](/raw/home-intro.md)**
 - **[Docs](/raw/docs.md)**
 - **[About](/raw/about.md)** - An open-source publishing framework built for AI agents and developers to ship websites, docs, or blogs..
@@ -53,6 +54,6 @@ This is the homepage index of all published content.
 
 ---
 
-**Total Content:** 18 posts, 7 pages
+**Total Content:** 18 posts, 8 pages
 
 All content is available as raw markdown files at `/raw/{slug}.md`

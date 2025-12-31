@@ -5,7 +5,7 @@ Project instructions for Claude Code.
 ## Project context
 
 <!-- Auto-updated by sync:discovery -->
-<!-- Site: markdown  | Posts: 17 | Pages: 5 | Updated: 2025-12-30T20:03:38.736Z -->
+<!-- Site: markdown  | Posts: 17 | Pages: 5 | Updated: 2025-12-30T23:27:44.146Z -->
 
 Markdown sync framework. Write markdown in `content/`, run sync commands, content appears instantly via Convex real-time database. Built for developers and AI agents.
 
@@ -60,6 +60,12 @@ npx convex deploy              # Deploy Convex functions
 ```
 
 Netlify build command: `npm ci --include=dev && npx convex deploy --cmd 'npm run build'`
+
+## AI assistance
+
+- Always use Context7 MCP for library/API documentation, code generation, setup or configuration steps
+- Proactively look up documentation without explicit requests when working with libraries
+- Use Context7 for up-to-date API references and best practices
 
 ## Code conventions
 

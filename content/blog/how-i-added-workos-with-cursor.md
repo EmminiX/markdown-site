@@ -2,15 +2,17 @@
 title: "How I added WorkOS to my Convex app with Cursor"
 description: "A timeline of adding WorkOS AuthKit authentication to my markdown blog dashboard using Cursor, prompt engineering, and vibe coding. From PRD import to published feature."
 date: "2025-12-30"
-slug: "how-i-added-workos-with-cursor"
+slug: "workos-with-convex-cursor"
 tags: ["cursor", "workos", "convex", "prompt-engineering", "ai-coding"]
 readTime: "8 min read"
 featured: false
+newsletter: false
 featuredOrder: 5
 published: true
 unlisted: true
 layout: "sidebar"
 excerpt: "How I used Cursor, prompt engineering, and Claude to add WorkOS authentication to my Convex dashboard. A real timeline from PRD import to published feature."
+authorName: "Wayne Sutton"
 ---
 
 # How I added WorkOS to my Convex app with Cursor

@@ -4,6 +4,30 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [2.2.0] - 2025-12-30
+
+### Added
+
+- Footer content via markdown page
+  - New `content/pages/footer.md` for managing footer content via markdown sync
+  - Footer content syncs with `npm run sync` without redeploy needed
+  - Edit footer text, links, and formatting through markdown instead of code
+  - Falls back to `siteConfig.footer.defaultContent` when page not found
+  - Set `showInNav: false` to hide from navigation (page remains accessible via direct URL)
+  - Supports full markdown including links, paragraphs, and line breaks
+
+### Changed
+
+- `src/pages/Home.tsx`: Fetches footer page by slug "footer" and passes content to Footer component
+- `src/pages/Blog.tsx`: Fetches footer page by slug "footer" and passes content to Footer component
+- Footer component now prioritizes page content over siteConfig.defaultContent
+
+### Technical
+
+- New file: `content/pages/footer.md` with frontmatter (slug: "footer", showInNav: false)
+- Uses existing `api.pages.getPageBySlug` query to fetch footer content
+- Pattern matches `home-intro` page for consistent content management
+
 ## [2.1.0] - 2025-12-30
 
 ### Added

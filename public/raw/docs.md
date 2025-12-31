@@ -2,7 +2,7 @@
 
 ---
 Type: page
-Date: 2025-12-30
+Date: 2025-12-31
 ---
 
 ## Getting Started
@@ -143,6 +143,8 @@ order: 1
 Content here...
 ```
 
+### Frontmatter options
+
 | Field              | Required | Description                                                                                                                                                                                            |
 | ------------------ | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `title`            | Yes      | Nav link text                                                                                                                                                                                          |
@@ -212,6 +214,38 @@ Your homepage intro text here.
 **Blog heading styles:** Headings (h1-h6) in home intro content use the same styling as blog posts (`blog-h1` through `blog-h6` classes). Each heading gets an automatic ID and a clickable anchor link (#) that appears on hover. Lists, blockquotes, horizontal rules, and links also use blog styling classes for consistent typography.
 
 **Fallback:** If `home-intro` page is not found, the homepage falls back to `siteConfig.bio` text.
+
+### Footer content
+
+The footer content can be synced from markdown via `content/pages/footer.md` (slug: `footer`). This allows you to update footer text without touching code.
+
+**Create footer content:**
+
+1. Create `content/pages/footer.md`:
+
+```markdown
+---
+title: "Footer"
+slug: "footer"
+published: true
+showInNav: false
+order: -1
+---
+
+Built with [Convex](https://convex.dev) for real-time sync and deployed on [Netlify](https://netlify.com).
+
+Created by [Your Name](https://x.com/yourhandle). Follow on [Twitter/X](https://x.com/yourhandle) and [GitHub](https://github.com/yourusername).
+```
+
+2. Run `npm run sync` to sync to Convex
+
+3. Footer content appears on homepage and blog page instantly (no rebuild needed)
+
+**Markdown support:** Footer content supports full markdown including links, paragraphs, line breaks, and images. External links automatically open in new tabs.
+
+**Fallback:** If `footer` page is not found, the footer falls back to `siteConfig.footer.defaultContent`.
+
+**Relationship with siteConfig:** The `content/pages/footer.md` page takes priority over `siteConfig.footer.defaultContent` when present. Use the markdown page for dynamic content that changes frequently, or keep using siteConfig for static footer content.
 
 ### Sidebar layout
 

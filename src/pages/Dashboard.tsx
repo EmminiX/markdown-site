@@ -4092,6 +4092,11 @@ export default siteConfig;
               <span>Show on pages</span>
             </label>
           </div>
+          <p className="config-field-note" style={{ marginTop: "0.75rem" }}>
+            Footer content is managed via{" "}
+            <code>content/pages/footer.md</code>. Run{" "}
+            <code>npm run sync</code> to update.
+          </p>
         </div>
 
         {/* AI Chat Settings */}

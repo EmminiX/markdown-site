@@ -12,8 +12,6 @@ blogFeatured: false
 aiChat: false
 image: /images/1225-changelog.png
 excerpt: "Thank you for the stars, forks, and feedback. More AI-first publishing features are coming."
-authorName: "Wayne Sutton"
-authorImage: "/images/authors/markdown.png"
 ---
 
 # Happy holidays and thank you

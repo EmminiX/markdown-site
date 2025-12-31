@@ -100,6 +100,9 @@ export default function Home() {
   // Fetch home intro content from Convex (synced via markdown)
   const homeIntro = useQuery(api.pages.getPageBySlug, { slug: "home-intro" });
 
+  // Fetch footer content from Convex (synced via markdown)
+  const footerPage = useQuery(api.pages.getPageBySlug, { slug: "footer" });
+
   // State for view mode toggle (list or cards)
   const [viewMode, setViewMode] = useState<"list" | "cards">(
     siteConfig.featuredViewMode,
@@ -408,7 +411,7 @@ export default function Home() {
 
       {/* Footer section */}
       {siteConfig.footer.enabled && siteConfig.footer.showOnHomepage && (
-        <Footer content={siteConfig.footer.defaultContent} />
+        <Footer content={footerPage?.content} />
       )}
 
       {/* Social footer section */}

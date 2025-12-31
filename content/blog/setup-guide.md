@@ -1085,6 +1085,8 @@ Pages appear automatically in the navigation when published.
 
 **Home intro content:** Create `content/pages/home.md` (slug: `home-intro`) to sync homepage intro text from markdown. Headings (h1-h6) use blog post styling (`blog-h1` through `blog-h6`) with clickable anchor links. Lists, blockquotes, horizontal rules, and links also use blog styling for consistent typography. Set `textAlign: "left"`, `"center"`, or `"right"` to control alignment. Run `npm run sync` to update homepage text instantly without redeploying. Falls back to `siteConfig.bio` if `home-intro` page not found.
 
+**Footer content via markdown:** Create `content/pages/footer.md` (slug: `footer`) to manage footer content via markdown sync instead of hardcoding in siteConfig.ts. Run `npm run sync` to update footer text instantly without touching code. Supports full markdown including links, paragraphs, and line breaks. Falls back to `siteConfig.footer.defaultContent` if page not found.
+
 **Sidebar layout:** Add `layout: "sidebar"` to any post or page frontmatter to enable a docs-style layout with a table of contents sidebar. The sidebar extracts headings (H1, H2, H3) automatically and provides smooth scroll navigation. Only appears if headings exist in the content.
 
 **Right sidebar:** When enabled in `siteConfig.rightSidebar.enabled`, posts and pages can display a right sidebar containing the CopyPageDropdown at 1135px+ viewport width. Add `rightSidebar: true` to frontmatter to enable. Without this field, pages render normally with CopyPageDropdown in the nav bar. When enabled, CopyPageDropdown moves from the navigation bar to the right sidebar on wide screens. The right sidebar is hidden below 1135px, and CopyPageDropdown returns to the nav bar automatically.
@@ -1093,7 +1095,7 @@ Pages appear automatically in the navigation when published.
 
 **Image lightbox:** Images in blog posts and pages automatically open in a full-screen lightbox when clicked (if enabled in `siteConfig.imageLightbox.enabled`). This allows readers to view images at full size. The lightbox can be closed by clicking outside the image, pressing Escape, or clicking the close button. To disable this feature, set `imageLightbox.enabled: false` in `src/config/siteConfig.ts`.
 
-**Footer:** Footer content can be set in frontmatter (`footer` field) or use `siteConfig.footer.defaultContent`. Control visibility globally via `siteConfig.footer.enabled` and per-page via `showFooter: true/false` frontmatter.
+**Footer:** Footer content can be managed three ways: (1) Create `content/pages/footer.md` to sync footer content via markdown (recommended), (2) set in frontmatter `footer` field for per-page overrides, or (3) use `siteConfig.footer.defaultContent` for static content. The markdown page takes priority over siteConfig when present. Control visibility globally via `siteConfig.footer.enabled` and per-page via `showFooter: true/false` frontmatter.
 
 **Social footer:** Display social icons and copyright below the main footer. Configure via `siteConfig.socialFooter`. Control visibility per-page via `showSocialFooter: true/false` frontmatter.
 

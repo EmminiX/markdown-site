@@ -28,6 +28,9 @@ export default function Blog() {
   // Fetch all blog featured posts for hero + featured row
   const blogFeaturedPosts = useQuery(api.posts.getBlogFeaturedPosts);
 
+  // Fetch footer content from Convex (synced via markdown)
+  const footerPage = useQuery(api.pages.getPageBySlug, { slug: "footer" });
+
   // State for view mode toggle (list or cards)
   const [viewMode, setViewMode] = useState<"list" | "cards">(
     siteConfig.blogPage.viewMode,
@@ -218,7 +221,7 @@ export default function Blog() {
         )}
 
       {/* Footer section */}
-      {showFooter && <Footer />}
+      {showFooter && <Footer content={footerPage?.content} />}
 
       {/* Social footer section */}
       {siteConfig.socialFooter?.enabled && siteConfig.socialFooter.showOnBlogPage && (

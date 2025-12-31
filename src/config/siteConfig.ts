@@ -491,7 +491,7 @@ export const siteConfig: SiteConfig = {
   },
 
   // Footer configuration
-  // Footer content can be set in frontmatter (footer field) or use defaultContent here
+  // Footer content is loaded from content/pages/footer.md (synced via npm run sync)
   // Use showFooter: false in frontmatter to hide footer on specific posts/pages
   footer: {
     enabled: true, // Global toggle for footer
@@ -499,10 +499,8 @@ export const siteConfig: SiteConfig = {
     showOnPosts: true, // Default: show footer on blog posts (override with frontmatter)
     showOnPages: true, // Default: show footer on static pages (override with frontmatter)
     showOnBlogPage: true, // Show footer on /blog page
-    // Default footer markdown (used when frontmatter footer field is not provided)
-    defaultContent: `Built with [Convex](https://convex.dev) for real-time sync and deployed on [Netlify](https://netlify.com). Read the [project on GitHub](https://github.com/waynesutton/markdown-site) to fork and deploy your own. View [real-time site stats](/stats).
-
-Created by [Wayne](https://x.com/waynesutton) with Convex, Cursor, and Claude Opus 4.5. Follow on [Twitter/X](https://x.com/waynesutton), [LinkedIn](https://www.linkedin.com/in/waynesutton/), and [GitHub](https://github.com/waynesutton). This project is licensed under the MIT [License](https://github.com/waynesutton/markdown-site?tab=MIT-1-ov-file).`,
+    // Default footer markdown (fallback if footer.md doesn't exist - edit content/pages/footer.md instead)
+    defaultContent: undefined,
   },
 
   // Homepage configuration
@@ -577,6 +575,7 @@ Created by [Wayne](https://x.com/waynesutton) with Convex, Cursor, and Claude Op
       },
       { platform: "twitter", url: "https://x.com/waynesutton" },
       { platform: "linkedin", url: "https://www.linkedin.com/in/waynesutton/" },
+      { platform: "discord", url: "https://www.convex.dev/community/" },
     ],
     copyright: {
       siteName: "MarkDown Sync is open-source", // Update with your site/company name
