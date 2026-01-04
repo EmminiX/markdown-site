@@ -7,27 +7,12 @@ import {
   Download,
   ExternalLink,
 } from "lucide-react";
-import siteConfig from "../config/siteConfig";
 
 // Maximum URL length for query parameters (conservative limit)
 const MAX_URL_LENGTH = 6000;
 
-// Universal AI prompt for reading raw markdown
-const AI_READ_PROMPT = `Read the raw markdown document at the URL below. If the content loads successfully:
-- Provide a concise accurate summary
-- Be ready to answer follow up questions using only this document
-
-If the content cannot be loaded:
-- Say so explicitly
-- Do not guess or infer content
-
-URL:`;
-
-// Construct GitHub raw URL for a slug
-function getGitHubRawUrl(slug: string): string {
-  const { owner, repo, branch, contentPath } = siteConfig.gitHubRepo;
-  return `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${contentPath}/${slug}.md`;
-}
+// Simple AI prompt for reading URLs
+const AI_READ_PROMPT = "Read this URL and summarize it:";
 
 // Extended props interface with optional metadata
 interface CopyPageDropdownProps {
@@ -422,12 +407,14 @@ export default function CopyPageDropdown(props: CopyPageDropdownProps) {
           {/* Divider */}
           {/* <div className="copy-page-divider" role="separator" /> */}
 
-          {/* AI service links using GitHub raw URLs */}
-          {/* Note: Requires git push to work - npm sync alone is not sufficient */}
+          {/* AI service links using local /raw URLs */}
           <button
             className="copy-page-item"
             onClick={() => {
-              const rawUrl = getGitHubRawUrl(props.slug);
+              const rawUrl = new URL(
+                `/raw/${props.slug}.md`,
+                window.location.origin,
+              ).toString();
               const prompt = encodeURIComponent(`${AI_READ_PROMPT} ${rawUrl}`);
               window.open(
                 `https://chatgpt.com/?q=${prompt}`,
@@ -460,7 +447,10 @@ export default function CopyPageDropdown(props: CopyPageDropdownProps) {
           <button
             className="copy-page-item"
             onClick={() => {
-              const rawUrl = getGitHubRawUrl(props.slug);
+              const rawUrl = new URL(
+                `/raw/${props.slug}.md`,
+                window.location.origin,
+              ).toString();
               const prompt = encodeURIComponent(`${AI_READ_PROMPT} ${rawUrl}`);
               window.open(
                 `https://claude.ai/new?q=${prompt}`,
@@ -493,7 +483,10 @@ export default function CopyPageDropdown(props: CopyPageDropdownProps) {
           <button
             className="copy-page-item"
             onClick={() => {
-              const rawUrl = getGitHubRawUrl(props.slug);
+              const rawUrl = new URL(
+                `/raw/${props.slug}.md`,
+                window.location.origin,
+              ).toString();
               const prompt = encodeURIComponent(`${AI_READ_PROMPT} ${rawUrl}`);
               window.open(
                 `https://www.perplexity.ai/?q=${prompt}`,

@@ -4,9 +4,15 @@
 
 ## Current Status
 
-v2.8.3 ready. Updated raw/index.md to include home.md and footer.md content.
+v2.8.4 ready. AI service links now use local /raw URLs with simplified prompt.
 
 ## Completed
+
+- [x] Update AI service links to use local /raw URLs
+  - [x] Changed ChatGPT, Claude, Perplexity links from GitHub raw URLs to `/raw/{slug}.md`
+  - [x] Simplified AI prompt to "Read this URL and summarize it:"
+  - [x] Removed unused `siteConfig` import and `getGitHubRawUrl` function
+  - [x] URLs now constructed using `window.location.origin` for consistency
 
 - [x] Update raw/index.md to include home.md and footer.md content
   - [x] Updated `generateHomepageIndex` function in `scripts/sync-posts.ts`

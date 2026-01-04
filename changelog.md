@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [2.8.4] - 2026-01-03
+
+### Changed
+
+- AI service links (ChatGPT, Claude, Perplexity) now use local `/raw/{slug}.md` URLs instead of GitHub raw URLs
+- Simplified AI prompt from multi-line instructions to "Read this URL and summarize it:"
+
+### Technical
+
+- Updated `src/components/CopyPageDropdown.tsx` to construct URLs using `window.location.origin`
+- Removed unused `siteConfig` import and `getGitHubRawUrl` function
+
 ## [2.8.3] - 2026-01-03
 
 ### Changed

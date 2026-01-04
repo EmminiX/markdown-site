@@ -12,6 +12,23 @@ docsSectionOrder: 4
 All notable changes to this project.
 ![](https://img.shields.io/badge/License-MIT-yellow.svg)
 
+## v2.8.4
+
+Released January 3, 2026
+
+**AI service links now use local /raw URLs**
+
+- ChatGPT, Claude, and Perplexity links now use local `/raw/{slug}.md` URLs instead of GitHub raw URLs
+- Simplified AI prompt from multi-line instructions to "Read this URL and summarize it:"
+- No longer requires git push for AI links to work (synced content available immediately)
+
+**Technical details:**
+
+- Updated URL construction to use `window.location.origin` for consistency
+- Removed unused `siteConfig` import and `getGitHubRawUrl` function
+
+Updated files: `src/components/CopyPageDropdown.tsx`
+
 ## v2.8.3
 
 Released January 3, 2026
