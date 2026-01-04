@@ -9,14 +9,16 @@
  * - src/config/siteConfig.ts (site name, bio, GitHub username, features)
  * - src/pages/Home.tsx (intro paragraph, footer section)
  * - src/pages/Post.tsx (SITE_URL, SITE_NAME constants)
+ * - src/pages/DocsPage.tsx (SITE_URL constant)
  * - convex/http.ts (SITE_URL, SITE_NAME constants)
  * - convex/rss.ts (SITE_URL, SITE_TITLE, SITE_DESCRIPTION)
  * - index.html (meta tags, JSON-LD, title)
  * - public/llms.txt (site info, API endpoints)
  * - public/robots.txt (sitemap URL)
- * - public/openapi.yaml (server URL, site name)
+ * - public/openapi.yaml (server URL, site name, example URLs)
  * - public/.well-known/ai-plugin.json (plugin metadata)
- * - src/context/ThemeContext.tsx (default theme)
+ * - netlify/edge-functions/mcp.ts (SITE_URL, SITE_NAME constants)
+ * - scripts/send-newsletter.ts (SITE_URL fallback)
  */
 
 import * as fs from "fs";
@@ -453,6 +455,19 @@ function updatePostTsx(config: ForkConfig): void {
   ]);
 }
 
+// Update DocsPage.tsx
+function updateDocsPageTsx(config: ForkConfig): void {
+  console.log("\nUpdating src/pages/DocsPage.tsx...");
+
+  updateFile("src/pages/DocsPage.tsx", [
+    // Match any existing SITE_URL value (https://...)
+    {
+      search: /const SITE_URL = "https:\/\/[^"]+";/,
+      replace: `const SITE_URL = "${config.siteUrl}";`,
+    },
+  ]);
+}
+
 // Update convex/http.ts
 function updateConvexHttp(config: ForkConfig): void {
   console.log("\nUpdating convex/http.ts...");
@@ -750,6 +765,8 @@ function updateOpenApiYaml(config: ForkConfig): void {
   console.log("\nUpdating public/openapi.yaml...");
 
   const githubUrl = `https://github.com/${config.githubUsername}/${config.githubRepo}`;
+  // Extract domain from siteUrl for example URLs (without www. if present)
+  const siteUrlForExamples = config.siteUrl.replace(/^https?:\/\/(www\.)?/, "https://");
 
   updateFile("public/openapi.yaml", [
     // Match any title ending with API
@@ -767,15 +784,30 @@ function updateOpenApiYaml(config: ForkConfig): void {
       search: /- url: https:\/\/[^\s]+\n\s+description: Production server/,
       replace: `- url: ${config.siteUrl}\n    description: Production server`,
     },
-    // Match any example site name
+    // Match site name example in schema (line 31)
     {
-      search: /example: .+\n\s+url:/g,
-      replace: `example: ${config.siteName}\n                    url:`,
+      search: /example: markdown sync framework/,
+      replace: `example: ${config.siteName}`,
     },
-    // Match any example URL (for site URL)
+    // Match site URL example in schema (line 34)
     {
-      search: /example: https:\/\/[^\s]+\n\s+posts:/,
-      replace: `example: ${config.siteUrl}\n                  posts:`,
+      search: /example: https:\/\/markdown\.fast\n(\s+)posts:/,
+      replace: `example: ${siteUrlForExamples}\n$1posts:`,
+    },
+    // Match post URL example (line 167)
+    {
+      search: /example: https:\/\/markdown\.fast\/how-to-build-blog/,
+      replace: `example: ${siteUrlForExamples}/how-to-build-blog`,
+    },
+    // Match markdown URL example (line 170)
+    {
+      search: /example: https:\/\/markdown\.fast\/api\/post\?slug=how-to-build-blog/,
+      replace: `example: ${siteUrlForExamples}/api/post?slug=how-to-build-blog`,
+    },
+    // Match any remaining markdown.fast URLs
+    {
+      search: /https:\/\/(www\.)?markdown\.fast/g,
+      replace: siteUrlForExamples,
     },
   ]);
 }
@@ -823,6 +855,47 @@ function updateThemeConfig(config: ForkConfig): void {
   ]);
 }
 
+// Update netlify/edge-functions/mcp.ts
+function updateMcpEdgeFunction(config: ForkConfig): void {
+  console.log("\nUpdating netlify/edge-functions/mcp.ts...");
+
+  updateFile("netlify/edge-functions/mcp.ts", [
+    // Match any existing SITE_URL constant
+    {
+      search: /const SITE_URL = "https:\/\/[^"]+";/,
+      replace: `const SITE_URL = "${config.siteUrl}";`,
+    },
+    // Match any existing SITE_NAME constant
+    {
+      search: /const SITE_NAME = "[^"]+";/,
+      replace: `const SITE_NAME = "${config.siteName}";`,
+    },
+    // Match any existing MCP_SERVER_NAME constant (create from site name)
+    {
+      search: /const MCP_SERVER_NAME = "[^"]+";/,
+      replace: `const MCP_SERVER_NAME = "${config.siteName.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "")}-mcp";`,
+    },
+  ]);
+}
+
+// Update scripts/send-newsletter.ts
+function updateSendNewsletter(config: ForkConfig): void {
+  console.log("\nUpdating scripts/send-newsletter.ts...");
+
+  updateFile("scripts/send-newsletter.ts", [
+    // Match any existing SITE_URL fallback in comment
+    {
+      search: /\*   - SITE_URL: Your site URL \(default: https:\/\/[^)]+\)/,
+      replace: `*   - SITE_URL: Your site URL (default: ${config.siteUrl})`,
+    },
+    // Match any existing SITE_URL fallback in code
+    {
+      search: /const siteUrl = process\.env\.SITE_URL \|\| "https:\/\/[^"]+";/,
+      replace: `const siteUrl = process.env.SITE_URL || "${config.siteUrl}";`,
+    },
+  ]);
+}
+
 // Main function
 function main(): void {
   console.log("Fork Configuration Script");
@@ -837,6 +910,7 @@ function main(): void {
   updateSiteConfig(config);
   updateHomeTsx(config);
   updatePostTsx(config);
+  updateDocsPageTsx(config);
   updateConvexHttp(config);
   updateConvexRss(config);
   updateIndexHtml(config);
@@ -845,6 +919,8 @@ function main(): void {
   updateOpenApiYaml(config);
   updateAiPluginJson(config);
   updateThemeConfig(config);
+  updateMcpEdgeFunction(config);
+  updateSendNewsletter(config);
 
   console.log("\n=========================");
   console.log("Configuration complete!");

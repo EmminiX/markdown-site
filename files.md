@@ -94,9 +94,10 @@ A brief description of each file in the codebase.
 
 ### Hooks (`src/hooks/`)
 
-| File                 | Description                                      |
-| -------------------- | ------------------------------------------------ |
-| `usePageTracking.ts` | Page view recording and active session heartbeat |
+| File                       | Description                                                                                                                                              |
+| -------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `usePageTracking.ts`       | Page view recording and active session heartbeat                                                                                                         |
+| `useSearchHighlighting.ts` | Search term highlighting and scroll-to-match. Reads `?q=` URL param, waits for content to load, highlights matches in DOM, scrolls to first match. |
 
 ### Styles (`src/styles/`)
 
@@ -225,7 +226,7 @@ Markdown files for static pages like About, Projects, Contact, Changelog.
 | `sync-posts.ts`           | Syncs markdown files to Convex at build time (markdown sync v2). Generates `raw/index.md` with home.md content at top, posts/pages list, and footer.md content at bottom |
 | `sync-discovery-files.ts` | Updates AGENTS.md, CLAUDE.md, and llms.txt with current app data  |
 | `import-url.ts`           | Imports external URLs as markdown posts (Firecrawl)   |
-| `configure-fork.ts`       | Automated fork configuration (reads fork-config.json). ES module compatible using fileURLToPath for __dirname equivalent. |
+| `configure-fork.ts`       | Automated fork configuration (reads fork-config.json, updates 14 files). ES module compatible using fileURLToPath for __dirname equivalent. |
 | `send-newsletter.ts`      | CLI tool for sending newsletter posts (npm run newsletter:send <slug>). Calls scheduleSendPostNewsletter mutation directly. |
 | `send-newsletter-stats.ts` | CLI tool for sending weekly stats summary (npm run newsletter:send:stats). Calls scheduleSendStatsSummary mutation directly. |
 | `sync-server.ts`          | Local HTTP server for executing sync commands from Dashboard UI. Runs on localhost:3001 with optional token authentication. Whitelisted commands only. Part of markdown sync v2. |

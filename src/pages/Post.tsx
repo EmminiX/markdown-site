@@ -88,7 +88,12 @@ export default function Post({
   const [copied, setCopied] = useState(false);
 
   // Scroll to hash anchor after content loads
+  // Skip if there's a search query - let the highlighting hook handle scroll
   useEffect(() => {
+    // If there's a search query, the highlighting hook handles scrolling to the match
+    const searchQuery = new URLSearchParams(location.search).get("q");
+    if (searchQuery) return;
+
     if (!location.hash) return;
     if (page === undefined && post === undefined) return;
 
@@ -102,7 +107,7 @@ export default function Post({
     }, 100);
 
     return () => clearTimeout(timer);
-  }, [location.hash, page, post]);
+  }, [location.hash, location.search, page, post]);
 
   // Update sidebar context with headings for mobile menu
   useEffect(() => {
@@ -663,7 +668,7 @@ export default function Post({
               <p className="post-description">{post.description}</p>
             )}
           </header>
-          {/* Blog post sharing links */}
+          {/* Blog post content - raw markdown or rendered */}
           <BlogPost content={post.content} slug={post.slug} pageType="post" />
 
           <footer className="post-footer">

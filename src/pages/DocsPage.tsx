@@ -4,9 +4,13 @@ import { useQuery } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import DocsLayout from "../components/DocsLayout";
 import BlogPost from "../components/BlogPost";
+import CopyPageDropdown from "../components/CopyPageDropdown";
 import { extractHeadings } from "../utils/extractHeadings";
 import siteConfig from "../config/siteConfig";
 import { ArrowRight } from "lucide-react";
+
+// Site URL for CopyPageDropdown - update when forking
+const SITE_URL = "https://www.markdown.fast";
 
 export default function DocsPage() {
   // Fetch landing page content (checks pages first, then posts)
@@ -64,10 +68,25 @@ export default function DocsPage() {
   // If we have landing content, render it with DocsLayout
   if (landingContent) {
     const headings = extractHeadings(landingContent.content);
+    const description =
+      "description" in landingContent
+        ? landingContent.description
+        : "excerpt" in landingContent
+          ? landingContent.excerpt
+          : undefined;
 
     return (
       <DocsLayout headings={headings} currentSlug={landingContent.slug}>
         <article className="docs-article">
+          <div className="docs-article-actions">
+            <CopyPageDropdown
+              title={landingContent.title}
+              content={landingContent.content}
+              url={`${SITE_URL}/${landingContent.slug}`}
+              slug={landingContent.slug}
+              description={description}
+            />
+          </div>
           <header className="docs-article-header">
             <h1 className="docs-article-title">{landingContent.title}</h1>
             {"description" in landingContent && landingContent.description && (

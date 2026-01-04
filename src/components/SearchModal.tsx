@@ -53,7 +53,8 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
           e.preventDefault();
           if (results[selectedIndex]) {
             const result = results[selectedIndex];
-            const url = result.anchor ? `/${result.slug}#${result.anchor}` : `/${result.slug}`;
+            // Pass search query as URL param for highlighting on destination page
+            const url = `/${result.slug}?q=${encodeURIComponent(searchQuery)}`;
             navigate(url);
             onClose();
           }
@@ -68,8 +69,9 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
   );
 
   // Handle clicking on a result
-  const handleResultClick = (slug: string, anchor?: string) => {
-    const url = anchor ? `/${slug}#${anchor}` : `/${slug}`;
+  const handleResultClick = (slug: string) => {
+    // Pass search query as URL param for highlighting on destination page
+    const url = `/${slug}?q=${encodeURIComponent(searchQuery)}`;
     navigate(url);
     onClose();
   };
@@ -136,7 +138,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                 <li key={result._id}>
                   <button
                     className={`search-result-item ${index === selectedIndex ? "selected" : ""}`}
-                    onClick={() => handleResultClick(result.slug, result.anchor)}
+                    onClick={() => handleResultClick(result.slug)}
                     onMouseEnter={() => setSelectedIndex(index)}
                   >
                     <div className="search-result-icon">

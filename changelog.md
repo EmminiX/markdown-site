@@ -4,6 +4,44 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [2.8.6] - 2026-01-04
+
+### Changed
+
+- Fork configuration script now updates 14 files (was 11)
+  - Added `src/pages/DocsPage.tsx` (SITE_URL constant)
+  - Added `netlify/edge-functions/mcp.ts` (SITE_URL, SITE_NAME, MCP_SERVER_NAME)
+  - Added `scripts/send-newsletter.ts` (default SITE_URL)
+  - Improved `public/openapi.yaml` handling for all example URLs
+- Logo gallery hrefs now use relative URLs instead of hardcoded markdown.fast URLs
+  - Links like `/how-to-use-firecrawl`, `/docs`, `/setup-guide` work on any forked site
+- Updated `fork-config.json.example` with missing options (statsPage, mcpServer, imageLightbox)
+
+### Technical
+
+- Updated `scripts/configure-fork.ts` with new update functions: `updateDocsPageTsx()`, `updateMcpEdgeFunction()`, `updateSendNewsletter()`
+- Updated `FORK_CONFIG.md` with complete file list and updated AI agent prompt
+- Updated `content/blog/fork-configuration-guide.md` with accurate file count and output example
+
+## [2.8.5] - 2026-01-03
+
+### Added
+
+- Search result highlighting and scroll-to-match feature
+  - Clicking a search result navigates to the exact match location (not just the heading)
+  - All matching text is highlighted with theme-appropriate colors
+  - Highlights pulse on arrival, then fade to subtle background after 4 seconds
+  - Press Escape to clear highlights
+  - Works across all four themes (dark, light, tan, cloud)
+
+### Technical
+
+- Created `src/hooks/useSearchHighlighting.ts` hook with polling mechanism to wait for content load
+- Updated `src/components/SearchModal.tsx` to pass search query via `?q=` URL parameter
+- Updated `src/components/BlogPost.tsx` with article ref for highlighting
+- Updated `src/pages/Post.tsx` to defer scroll handling to highlighting hook when `?q=` present
+- Added `.search-highlight` and `.search-highlight-active` CSS styles with theme-specific colors
+
 ## [2.8.4] - 2026-01-03
 
 ### Changed

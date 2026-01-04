@@ -162,6 +162,20 @@
     "dayOfWeek": 0,
     "subject": "Weekly Digest"
   },
+  "statsPage": {
+    "enabled": true,
+    "showInNav": true
+  },
+  "mcpServer": {
+    "enabled": true,
+    "endpoint": "/mcp",
+    "publicRateLimit": 50,
+    "authenticatedRateLimit": 1000,
+    "requireAuth": false
+  },
+  "imageLightbox": {
+    "enabled": true
+  },
   "dashboard": {
     "enabled": true,
     "requireAuth": false

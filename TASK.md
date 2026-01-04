@@ -4,9 +4,26 @@
 
 ## Current Status
 
-v2.8.4 ready. AI service links now use local /raw URLs with simplified prompt.
+v2.8.6 ready. Fork configuration script now updates 14 files for complete site branding.
 
 ## Completed
+
+- [x] Fork configuration improvements
+  - [x] Updated `scripts/configure-fork.ts` to update 3 additional files (DocsPage.tsx, mcp.ts, send-newsletter.ts)
+  - [x] Improved `updateOpenApiYaml()` to handle all example URLs in OpenAPI spec
+  - [x] Changed logoGallery hrefs from hardcoded markdown.fast URLs to relative URLs
+  - [x] Updated `FORK_CONFIG.md` with complete file list (14 files, was 11)
+  - [x] Updated `content/blog/fork-configuration-guide.md` with accurate file count
+  - [x] Added missing options to `fork-config.json.example` (statsPage, mcpServer, imageLightbox)
+
+- [x] Search result highlighting and scroll-to-match
+  - [x] Created `useSearchHighlighting.ts` hook with polling mechanism to wait for content load
+  - [x] Search query passed via `?q=` URL parameter for highlighting on destination page
+  - [x] All matching text highlighted with theme-appropriate colors (dark/light/tan/cloud)
+  - [x] First match scrolls into view centered in viewport with header offset
+  - [x] Highlights pulse on arrival, fade to subtle after 4 seconds
+  - [x] Press Escape to clear highlights
+  - [x] Updated SearchModal.tsx, BlogPost.tsx, Post.tsx, global.css
 
 - [x] Update AI service links to use local /raw URLs
   - [x] Changed ChatGPT, Claude, Perplexity links from GitHub raw URLs to `/raw/{slug}.md`

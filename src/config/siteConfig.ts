@@ -411,27 +411,27 @@ export const siteConfig: SiteConfig = {
       },
       {
         src: "/images/logos/firecrawl.svg",
-        href: "https://www.markdown.fast/how-to-use-firecrawl",
+        href: "/how-to-use-firecrawl",
       },
       {
         src: "/images/logos/markdown.svg",
-        href: "https://markdown.fast/docs",
+        href: "/docs",
       },
       {
         src: "/images/logos/react.svg",
-        href: "https://markdown.fast/setup-guide",
+        href: "/setup-guide",
       },
       {
         src: "/images/logos/agentmail.svg",
-        href: "https://www.markdown.fast/how-to-use-agentmail/",
+        href: "/how-to-use-agentmail",
       },
       {
         src: "/images/logos/mcp.svg",
-        href: "https://www.markdown.fast/how-to-use-mcp-server/",
+        href: "/how-to-use-mcp-server",
       },
       {
         src: "/images/logos/workos.svg",
-        href: "https://www.markdown.fast/how-to-setup-workos",
+        href: "/how-to-setup-workos",
       },
     ],
     position: "above-footer",

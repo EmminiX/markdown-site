@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import remarkBreaks from "remark-breaks";
@@ -10,6 +10,7 @@ import { useTheme } from "../context/ThemeContext";
 import NewsletterSignup from "./NewsletterSignup";
 import ContactForm from "./ContactForm";
 import siteConfig from "../config/siteConfig";
+import { useSearchHighlighting } from "../hooks/useSearchHighlighting";
 
 // Whitelisted domains for iframe embeds (YouTube and Twitter/X only)
 const ALLOWED_IFRAME_DOMAINS = [
@@ -483,6 +484,10 @@ export default function BlogPost({
   } | null>(null);
   const isLightboxEnabled = siteConfig.imageLightbox?.enabled !== false;
 
+  // Search highlighting - scrolls to and highlights search terms from URL
+  const articleRef = useRef<HTMLElement>(null);
+  useSearchHighlighting({ containerRef: articleRef });
+
   const getCodeTheme = () => {
     switch (theme) {
       case "dark":
@@ -741,7 +746,7 @@ export default function BlogPost({
   if (hasInlineEmbeds) {
     return (
       <>
-        <article className="blog-post-content">
+        <article ref={articleRef} className="blog-post-content">
           {segments.map((segment, index) => {
             if (segment.type === "newsletter") {
               // Newsletter signup inline
@@ -777,7 +782,7 @@ export default function BlogPost({
   // No inline embeds, render content normally
   return (
     <>
-      <article className="blog-post-content">
+      <article ref={articleRef} className="blog-post-content">
         <ReactMarkdown
           remarkPlugins={[remarkGfm, remarkBreaks]}
           rehypePlugins={[rehypeRaw, [rehypeSanitize, sanitizeSchema]]}

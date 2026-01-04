@@ -49,20 +49,21 @@ The file `fork-config.json` is gitignored, so your configuration stays local and
 npm run configure
 ```
 
-This updates all 11 configuration files automatically:
+This updates all 14 configuration files automatically:
 
-- `src/config/siteConfig.ts`
-- `src/pages/Home.tsx`
-- `src/pages/Post.tsx`
-- `convex/http.ts`
-- `convex/rss.ts`
-- `index.html`
-- `public/llms.txt`
-- `public/robots.txt`
-- `public/openapi.yaml`
-- `public/.well-known/ai-plugin.json`
-
-Theme is now configured in `src/config/siteConfig.ts` (via the `defaultTheme` field).
+- `src/config/siteConfig.ts` (site name, bio, GitHub username, gitHubRepo config, default theme)
+- `src/pages/Home.tsx` (intro paragraph, footer links)
+- `src/pages/Post.tsx` (SITE_URL, SITE_NAME constants)
+- `src/pages/DocsPage.tsx` (SITE_URL constant for CopyPageDropdown)
+- `convex/http.ts` (SITE_URL, SITE_NAME constants)
+- `convex/rss.ts` (SITE_URL, SITE_TITLE, SITE_DESCRIPTION)
+- `netlify/edge-functions/mcp.ts` (SITE_URL, SITE_NAME, MCP_SERVER_NAME)
+- `scripts/send-newsletter.ts` (default SITE_URL)
+- `index.html` (meta tags, JSON-LD, page title)
+- `public/llms.txt` (site info, GitHub link)
+- `public/robots.txt` (sitemap URL)
+- `public/openapi.yaml` (server URL, site name, example URLs)
+- `public/.well-known/ai-plugin.json` (plugin metadata)
 
 ### Step 4: Review and deploy
 
@@ -83,17 +84,19 @@ Edit each file individually following the guide below.
 
 | File                                | What to Update                                               |
 | ----------------------------------- | ------------------------------------------------------------ |
-| `src/config/siteConfig.ts`          | Site name, bio, GitHub username, gitHubRepo config, features |
+| `src/config/siteConfig.ts`          | Site name, bio, GitHub username, gitHubRepo config, default theme, features |
 | `src/pages/Home.tsx`                | Intro paragraph, footer links                                |
 | `src/pages/Post.tsx`                | `SITE_URL`, `SITE_NAME` constants                            |
+| `src/pages/DocsPage.tsx`            | `SITE_URL` constant                                          |
 | `convex/http.ts`                    | `SITE_URL`, `SITE_NAME` constants                            |
 | `convex/rss.ts`                     | `SITE_URL`, `SITE_TITLE`, `SITE_DESCRIPTION`                 |
+| `netlify/edge-functions/mcp.ts`     | `SITE_URL`, `SITE_NAME`, `MCP_SERVER_NAME` constants         |
+| `scripts/send-newsletter.ts`        | Default `SITE_URL` constant                                  |
 | `index.html`                        | Meta tags, JSON-LD, page title                               |
 | `public/llms.txt`                   | Site info, GitHub link                                       |
 | `public/robots.txt`                 | Sitemap URL                                                  |
-| `public/openapi.yaml`               | Server URL, site name                                        |
+| `public/openapi.yaml`               | Server URL, site name, example URLs                          |
 | `public/.well-known/ai-plugin.json` | Plugin metadata                                              |
-| `src/config/siteConfig.ts`          | Default theme (`defaultTheme` field)                         |
 
 ---
 
@@ -1234,16 +1237,19 @@ GitHub Repo Config (for AI service links):
 - Content Path: public/raw
 
 Update these files:
-1. src/config/siteConfig.ts - site name, bio, GitHub username, gitHubRepo config
+1. src/config/siteConfig.ts - site name, bio, GitHub username, gitHubRepo config, defaultTheme
 2. src/pages/Home.tsx - intro paragraph and footer section with all creator links
 3. src/pages/Post.tsx - SITE_URL and SITE_NAME constants
-4. convex/http.ts - SITE_URL and SITE_NAME constants
-5. convex/rss.ts - SITE_URL, SITE_TITLE, SITE_DESCRIPTION
-6. index.html - all meta tags, JSON-LD, title
-7. public/llms.txt - site info and GitHub link
-8. public/robots.txt - header comment and sitemap URL
-9. public/openapi.yaml - API title, server URL, contact URL
-10. public/.well-known/ai-plugin.json - plugin metadata and contact email
+4. src/pages/DocsPage.tsx - SITE_URL constant
+5. convex/http.ts - SITE_URL and SITE_NAME constants
+6. convex/rss.ts - SITE_URL, SITE_TITLE, SITE_DESCRIPTION
+7. netlify/edge-functions/mcp.ts - SITE_URL, SITE_NAME, MCP_SERVER_NAME constants
+8. scripts/send-newsletter.ts - default SITE_URL constant
+9. index.html - all meta tags, JSON-LD, title
+10. public/llms.txt - site info and GitHub link
+11. public/robots.txt - header comment and sitemap URL
+12. public/openapi.yaml - API title, server URL, contact URL, example URLs
+13. public/.well-known/ai-plugin.json - plugin metadata and contact email
 ```
 
 ---

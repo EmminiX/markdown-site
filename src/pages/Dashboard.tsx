@@ -56,6 +56,8 @@ import {
   ChatText,
   SpinnerGap,
   CaretDown,
+  ArrowsOut,
+  ArrowsIn,
 } from "@phosphor-icons/react";
 import siteConfig from "../config/siteConfig";
 import AIChatView from "../components/AIChatView";
@@ -524,6 +526,19 @@ function DashboardContent() {
       return newValue;
     });
   }, []);
+
+  // Keyboard shortcut: Cmd+. to toggle sidebar
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === ".") {
+        e.preventDefault();
+        toggleSidebar();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [toggleSidebar]);
 
   // Toast notifications state
   const [toasts, setToasts] = useState<Toast[]>([]);
@@ -1115,12 +1130,20 @@ function DashboardContent() {
 
           {/* Write Post Section */}
           {activeSection === "write-post" && (
-            <WriteSection contentType="post" />
+            <WriteSection
+              contentType="post"
+              sidebarCollapsed={sidebarCollapsed}
+              setSidebarCollapsed={setSidebarCollapsed}
+            />
           )}
 
           {/* Write Page Section */}
           {activeSection === "write-page" && (
-            <WriteSection contentType="page" />
+            <WriteSection
+              contentType="page"
+              sidebarCollapsed={sidebarCollapsed}
+              setSidebarCollapsed={setSidebarCollapsed}
+            />
           )}
 
           {/* AI Agent Section */}
@@ -2033,6 +2056,13 @@ const POST_FIELDS = [
   { name: "blogFeatured", required: false, example: "true" },
   { name: "newsletter", required: false, example: "true" },
   { name: "contactForm", required: false, example: "true" },
+  { name: "unlisted", required: false, example: "true" },
+  { name: "docsSection", required: false, example: "true" },
+  { name: "docsSectionOrder", required: false, example: "1" },
+  { name: "docsSectionGroup", required: false, example: '"Setup"' },
+  { name: "docsSectionGroupOrder", required: false, example: "1" },
+  { name: "docsSectionGroupIcon", required: false, example: '"Rocket"' },
+  { name: "docsLanding", required: false, example: "true" },
 ];
 
 // Frontmatter field definitions for pages (matches Write.tsx)
@@ -2065,6 +2095,13 @@ const PAGE_FIELDS = [
   { name: "aiChat", required: false, example: "true" },
   { name: "newsletter", required: false, example: "true" },
   { name: "contactForm", required: false, example: "true" },
+  { name: "unlisted", required: false, example: "true" },
+  { name: "docsSection", required: false, example: "true" },
+  { name: "docsSectionOrder", required: false, example: "1" },
+  { name: "docsSectionGroup", required: false, example: '"Setup"' },
+  { name: "docsSectionGroupOrder", required: false, example: "1" },
+  { name: "docsSectionGroupIcon", required: false, example: '"Rocket"' },
+  { name: "docsLanding", required: false, example: "true" },
 ];
 
 // Generate frontmatter template based on content type
@@ -2129,11 +2166,75 @@ With sidebar layout enabled, headings automatically appear in the table of conte
 // localStorage keys for dashboard write
 const DASHBOARD_WRITE_POST_CONTENT = "dashboard_write_post_content";
 const DASHBOARD_WRITE_PAGE_CONTENT = "dashboard_write_page_content";
+const DASHBOARD_WRITE_FOCUS_MODE = "dashboard_write_focus_mode";
+const DASHBOARD_WRITE_FRONTMATTER_COLLAPSED = "dashboard_write_frontmatter_collapsed";
 
-function WriteSection({ contentType }: { contentType: "post" | "page" }) {
+function WriteSection({
+  contentType,
+  sidebarCollapsed,
+  setSidebarCollapsed,
+}: {
+  contentType: "post" | "page";
+  sidebarCollapsed: boolean;
+  setSidebarCollapsed: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
   const [content, setContent] = useState("");
   const [copied, setCopied] = useState(false);
   const [copiedField, setCopiedField] = useState<string | null>(null);
+  const [focusMode, setFocusMode] = useState(() => {
+    const saved = localStorage.getItem(DASHBOARD_WRITE_FOCUS_MODE);
+    return saved === "true";
+  });
+  const [frontmatterCollapsed, setFrontmatterCollapsed] = useState(() => {
+    const saved = localStorage.getItem(DASHBOARD_WRITE_FRONTMATTER_COLLAPSED);
+    // Default to collapsed in focus mode
+    return saved === "true";
+  });
+  // Store previous sidebar state before entering focus mode
+  const [prevSidebarState, setPrevSidebarState] = useState<boolean | null>(null);
+
+  // Toggle focus mode
+  const toggleFocusMode = useCallback(() => {
+    setFocusMode((prev) => {
+      const newValue = !prev;
+      localStorage.setItem(DASHBOARD_WRITE_FOCUS_MODE, String(newValue));
+      // When entering focus mode, save sidebar state and collapse it
+      if (newValue) {
+        setPrevSidebarState(sidebarCollapsed);
+        setSidebarCollapsed(true);
+        setFrontmatterCollapsed(true);
+        localStorage.setItem(DASHBOARD_WRITE_FRONTMATTER_COLLAPSED, "true");
+      } else {
+        // When exiting focus mode, restore previous sidebar state
+        if (prevSidebarState !== null) {
+          setSidebarCollapsed(prevSidebarState);
+        }
+      }
+      return newValue;
+    });
+  }, [sidebarCollapsed, setSidebarCollapsed, prevSidebarState]);
+
+  // Toggle frontmatter sidebar
+  const toggleFrontmatter = useCallback(() => {
+    setFrontmatterCollapsed((prev) => {
+      const newValue = !prev;
+      localStorage.setItem(DASHBOARD_WRITE_FRONTMATTER_COLLAPSED, String(newValue));
+      return newValue;
+    });
+  }, []);
+
+  // Keyboard shortcut: Escape to exit focus mode
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && focusMode) {
+        e.preventDefault();
+        toggleFocusMode();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [focusMode, toggleFocusMode]);
 
   // localStorage key based on content type
   const storageKey =
@@ -2269,7 +2370,9 @@ published: false
   const fields = contentType === "post" ? POST_FIELDS : PAGE_FIELDS;
 
   return (
-    <div className="dashboard-write-section">
+    <div
+      className={`dashboard-write-section ${focusMode ? "focus-mode" : ""} ${frontmatterCollapsed ? "frontmatter-collapsed" : ""}`}
+    >
       {/* Write Actions Header */}
       <div className="dashboard-write-header">
         <div className="dashboard-write-title">
@@ -2303,6 +2406,17 @@ published: false
             <Download size={16} />
             <span>Download .md</span>
           </button>
+          <button
+            onClick={toggleFocusMode}
+            className={`dashboard-action-btn focus-toggle ${focusMode ? "active" : ""}`}
+            title={focusMode ? "Exit focus mode (Esc)" : "Enter focus mode"}
+          >
+            {focusMode ? (
+              <ArrowsIn size={16} weight="regular" />
+            ) : (
+              <ArrowsOut size={16} weight="regular" />
+            )}
+          </button>
         </div>
       </div>
 
@@ -2333,9 +2447,18 @@ published: false
         </div>
 
         {/* Frontmatter Sidebar */}
-        <aside className="dashboard-write-sidebar">
+        <aside
+          className={`dashboard-write-sidebar ${frontmatterCollapsed ? "collapsed" : ""}`}
+        >
           <div className="dashboard-write-sidebar-header">
             <span>Frontmatter</span>
+            <button
+              onClick={toggleFrontmatter}
+              className="dashboard-write-sidebar-toggle"
+              title={frontmatterCollapsed ? "Expand" : "Collapse"}
+            >
+              <SidebarSimple size={16} weight="regular" />
+            </button>
           </div>
           <div className="dashboard-write-fields">
             <div className="write-fields-section">

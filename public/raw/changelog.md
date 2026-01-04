@@ -6,7 +6,43 @@ Date: 2026-01-04
 ---
 
 All notable changes to this project.
-![](https://img.shields.io/badge/License-MIT-yellow.svg)
+
+## v2.8.5
+
+Released January 3, 2026
+
+**Search result highlighting and scroll-to-match**
+
+- Clicking a search result now navigates to the exact match location (not just the nearest heading)
+- All matching text is highlighted with theme-appropriate colors
+- Highlights pulse on arrival, then fade to subtle background after 4 seconds
+- Press Escape to clear highlights
+- Works across all four themes (dark, light, tan, cloud)
+
+**Technical details:**
+
+- New `useSearchHighlighting.ts` hook with polling mechanism to wait for content load
+- Search query passed via `?q=` URL parameter instead of hash anchor
+- Theme-specific highlight colors matching existing design system
+
+Updated files: `src/hooks/useSearchHighlighting.ts` (new), `src/components/SearchModal.tsx`, `src/components/BlogPost.tsx`, `src/pages/Post.tsx`, `src/styles/global.css`
+
+## v2.8.4
+
+Released January 3, 2026
+
+**AI service links now use local /raw URLs**
+
+- ChatGPT, Claude, and Perplexity links now use local `/raw/{slug}.md` URLs instead of GitHub raw URLs
+- Simplified AI prompt from multi-line instructions to "Read this URL and summarize it:"
+- No longer requires git push for AI links to work (synced content available immediately)
+
+**Technical details:**
+
+- Updated URL construction to use `window.location.origin` for consistency
+- Removed unused `siteConfig` import and `getGitHubRawUrl` function
+
+Updated files: `src/components/CopyPageDropdown.tsx`
 
 ## v2.8.3
 

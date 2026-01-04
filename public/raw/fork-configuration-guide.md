@@ -58,7 +58,7 @@ Open `fork-config.json` and update the values:
 npm run configure
 ```
 
-The script reads your JSON file and updates all 11 configuration files automatically. You should see output like:
+The script reads your JSON file and updates all 14 configuration files automatically. You should see output like:
 
 ```
 Fork Configuration Script
@@ -67,14 +67,16 @@ Reading config from fork-config.json...
 Updating src/config/siteConfig.ts...
 Updating src/pages/Home.tsx...
 Updating src/pages/Post.tsx...
+Updating src/pages/DocsPage.tsx...
 Updating convex/http.ts...
 Updating convex/rss.ts...
+Updating netlify/edge-functions/mcp.ts...
+Updating scripts/send-newsletter.ts...
 Updating index.html...
 Updating public/llms.txt...
 Updating public/robots.txt...
 Updating public/openapi.yaml...
 Updating public/.well-known/ai-plugin.json...
-Updating default theme in src/config/siteConfig.ts...
 
 Configuration complete!
 ```
@@ -93,17 +95,19 @@ The configuration script updates these files:
 
 | File                                | What changes                                                                                                                                                                                                                                                                                     |
 | ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `src/config/siteConfig.ts`          | Site name, bio, GitHub username, gitHubRepo config, features (logo gallery, GitHub contributions, visitor map, blog page, posts display, homepage, right sidebar, footer, social footer, AI chat, newsletter, contact form, newsletter admin, stats page, MCP server, dashboard, image lightbox) |
+| `src/config/siteConfig.ts`          | Site name, bio, GitHub username, gitHubRepo config, default theme, features (logo gallery, GitHub contributions, visitor map, blog page, posts display, homepage, right sidebar, footer, social footer, AI chat, newsletter, contact form, newsletter admin, stats page, MCP server, dashboard, image lightbox) |
 | `src/pages/Home.tsx`                | Intro paragraph, footer links                                                                                                                                                                                                                                                                    |
 | `src/pages/Post.tsx`                | SITE_URL, SITE_NAME constants                                                                                                                                                                                                                                                                    |
+| `src/pages/DocsPage.tsx`            | SITE_URL constant                                                                                                                                                                                                                                                                                |
 | `convex/http.ts`                    | SITE_URL, SITE_NAME constants                                                                                                                                                                                                                                                                    |
 | `convex/rss.ts`                     | SITE_URL, SITE_TITLE, SITE_DESCRIPTION                                                                                                                                                                                                                                                           |
+| `netlify/edge-functions/mcp.ts`     | SITE_URL, SITE_NAME, MCP_SERVER_NAME constants                                                                                                                                                                                                                                                   |
+| `scripts/send-newsletter.ts`        | Default SITE_URL constant                                                                                                                                                                                                                                                                        |
 | `index.html`                        | Meta tags, JSON-LD, page title                                                                                                                                                                                                                                                                   |
 | `public/llms.txt`                   | Site info, GitHub link                                                                                                                                                                                                                                                                           |
 | `public/robots.txt`                 | Sitemap URL                                                                                                                                                                                                                                                                                      |
-| `public/openapi.yaml`               | Server URL, site name                                                                                                                                                                                                                                                                            |
+| `public/openapi.yaml`               | Server URL, site name, example URLs                                                                                                                                                                                                                                                              |
 | `public/.well-known/ai-plugin.json` | Plugin metadata                                                                                                                                                                                                                                                                                  |
-| `src/config/siteConfig.ts`          | Default theme (`defaultTheme` field)                                                                                                                                                                                                                                                             |
 
 ## Optional settings
 
