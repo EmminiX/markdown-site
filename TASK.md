@@ -10,9 +10,12 @@ v2.10.1 ready. Semantic search now optional via siteConfig.semanticSearch.enable
 
 - [x] Optional semantic search configuration
   - [x] Added `SemanticSearchConfig` interface to `siteConfig.ts`
-  - [x] Added `semanticSearch.enabled` toggle (default: true)
+  - [x] Added `semanticSearch.enabled` toggle (default: false to avoid blocking forks)
   - [x] Updated `SearchModal.tsx` to conditionally show mode toggle
   - [x] Updated `sync-posts.ts` to skip embedding generation when disabled
+  - [x] Updated `src/pages/Dashboard.tsx` with semantic search config option
+  - [x] Updated `FORK_CONFIG.md` with Semantic Search Configuration section
+  - [x] Updated `fork-config.json.example` with semanticSearch option
   - [x] Updated `docs-semantic-search.md` with enable/disable section
   - [x] Updated `docs.md` with semantic search configuration note
 
