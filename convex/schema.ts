@@ -226,4 +226,22 @@ export default defineSchema({
     createdAt: v.number(), // Timestamp when submitted
     emailSentAt: v.optional(v.number()), // Timestamp when email was sent (if applicable)
   }).index("by_createdAt", ["createdAt"]),
+
+  // Ask AI sessions for header AI chat feature
+  // Stores questions and stream IDs for RAG-based Q&A
+  askAISessions: defineTable({
+    question: v.string(), // User's question
+    streamId: v.string(), // Persistent text streaming ID
+    model: v.optional(v.string()), // Selected AI model
+    createdAt: v.number(), // Timestamp when session was created
+    sources: v.optional(
+      v.array(
+        v.object({
+          title: v.string(),
+          slug: v.string(),
+          type: v.string(),
+        })
+      )
+    ), // Optional sources cited in the response
+  }).index("by_stream", ["streamId"]),
 });

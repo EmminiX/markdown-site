@@ -67,12 +67,13 @@ agents. -->
 - **[Using Images in Blog Posts](/raw/using-images-in-posts.md)** - Learn how to add header images, inline images, and Open Graph images to your markdown posts.
   - Date: 2025-12-14 | Reading time: 4 min read | Tags: images, tutorial, markdown, open-graph
 
-## Pages (15)
+## Pages (16)
 
 - **[Footer](/raw/footer.md)**
 - **[Home Intro](/raw/home-intro.md)**
 - **[Documentation](/raw/documentation.md)**
 - **[About](/raw/about.md)** - An open-source publishing framework built for AI agents and developers to ship websites, docs, or blogs.
+- **[Ask AI](/raw/docs-ask-ai.md)**
 - **[Content](/raw/docs-content.md)**
 - **[Search](/raw/docs-search.md)**
 - **[Semantic Search](/raw/docs-semantic-search.md)**
@@ -87,7 +88,7 @@ agents. -->
 
 ---
 
-**Total Content:** 18 posts, 15 pages
+**Total Content:** 18 posts, 16 pages
 
 All content is available as raw markdown files at `/raw/{slug}.md`
 

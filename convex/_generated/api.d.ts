@@ -11,6 +11,7 @@
 import type * as aiChatActions from "../aiChatActions.js";
 import type * as aiChats from "../aiChats.js";
 import type * as aiImageGeneration from "../aiImageGeneration.js";
+import type * as askAI from "../askAI.js";
 import type * as cms from "../cms.js";
 import type * as contact from "../contact.js";
 import type * as contactActions from "../contactActions.js";
@@ -39,6 +40,7 @@ declare const fullApi: ApiFromModules<{
   aiChatActions: typeof aiChatActions;
   aiChats: typeof aiChats;
   aiImageGeneration: typeof aiImageGeneration;
+  askAI: typeof askAI;
   cms: typeof cms;
   contact: typeof contact;
   contactActions: typeof contactActions;
@@ -638,6 +640,41 @@ export declare const components: {
           newNamespace?: any;
           summand?: number;
           value: any;
+        },
+        any
+      >;
+    };
+  };
+  persistentTextStreaming: {
+    lib: {
+      addChunk: FunctionReference<
+        "mutation",
+        "internal",
+        { final: boolean; streamId: string; text: string },
+        any
+      >;
+      createStream: FunctionReference<"mutation", "internal", {}, any>;
+      getStreamStatus: FunctionReference<
+        "query",
+        "internal",
+        { streamId: string },
+        "pending" | "streaming" | "done" | "error" | "timeout"
+      >;
+      getStreamText: FunctionReference<
+        "query",
+        "internal",
+        { streamId: string },
+        {
+          status: "pending" | "streaming" | "done" | "error" | "timeout";
+          text: string;
+        }
+      >;
+      setStreamStatus: FunctionReference<
+        "mutation",
+        "internal",
+        {
+          status: "pending" | "streaming" | "done" | "error" | "timeout";
+          streamId: string;
         },
         any
       >;

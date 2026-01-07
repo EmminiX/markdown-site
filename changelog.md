@@ -4,6 +4,52 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [2.11.0] - 2026-01-06
+
+### Added
+
+- Ask AI header button with RAG-based Q&A about site content
+  - Header button with sparkle icon (before search button, after social icons)
+  - Keyboard shortcuts: Cmd+J or Cmd+/ (Mac), Ctrl+J or Ctrl+/ (Windows/Linux)
+  - Real-time streaming responses via Convex Persistent Text Streaming
+  - Model selector: Claude Sonnet 4 (default) or GPT-4o
+  - Markdown rendering with syntax highlighting in responses
+  - Internal links use React Router for seamless navigation
+  - Source citations with links to referenced posts/pages
+  - Copy response button (hover to reveal) for copying AI answers
+  - Clear chat button to reset conversation
+- AskAIConfig in siteConfig.ts for configuration
+  - `enabled`: Toggle Ask AI feature
+  - `defaultModel`: Default model ID
+  - `models`: Array of available models with id, name, and provider
+
+### How It Works
+
+1. User question stored in database with session ID
+2. Query converted to embedding using OpenAI text-embedding-ada-002
+3. Vector search finds top 5 relevant posts/pages
+4. Content sent to selected AI model with RAG system prompt
+5. Response streams in real-time with source citations appended
+
+### Technical
+
+- New component: `src/components/AskAIModal.tsx` with StreamingMessage subcomponent
+- New file: `convex/askAI.ts` - Session mutations and queries (regular runtime)
+- New file: `convex/askAI.node.ts` - HTTP streaming action (Node.js runtime)
+- New table: `askAISessions` with question, streamId, model, createdAt, sources fields
+- New HTTP endpoint: `/ask-ai-stream` for streaming responses
+- Updated `convex/convex.config.ts` with persistentTextStreaming component
+- Updated `convex/http.ts` with /ask-ai-stream route and OPTIONS handler
+- Updated `src/components/Layout.tsx` with Ask AI button and modal
+- Updated `src/styles/global.css` with Ask AI modal styles
+
+### Requirements
+
+- `semanticSearch.enabled: true` in siteConfig (for embeddings)
+- `OPENAI_API_KEY` in Convex (for embedding generation)
+- `ANTHROPIC_API_KEY` in Convex (for Claude models)
+- Run `npm run sync` to generate embeddings for content
+
 ## [2.10.2] - 2026-01-06
 
 ### Added

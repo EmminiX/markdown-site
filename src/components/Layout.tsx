@@ -2,10 +2,11 @@ import { ReactNode, useState, useEffect, useCallback } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useQuery } from "convex/react";
 import { api } from "../../convex/_generated/api";
-import { MagnifyingGlass } from "@phosphor-icons/react";
+import { MagnifyingGlass, Sparkle } from "@phosphor-icons/react";
 import ThemeToggle from "./ThemeToggle";
 import FontToggle from "./FontToggle";
 import SearchModal from "./SearchModal";
+import AskAIModal from "./AskAIModal";
 import MobileMenu, { HamburgerButton } from "./MobileMenu";
 import ScrollToTop, { ScrollToTopConfig } from "./ScrollToTop";
 import { useSidebarOptional } from "../context/SidebarContext";
@@ -28,6 +29,7 @@ export default function Layout({ children }: LayoutProps) {
   // Fetch published pages for navigation
   const pages = useQuery(api.pages.getAllPages);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isAskAIOpen, setIsAskAIOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
 
@@ -63,6 +65,16 @@ export default function Layout({ children }: LayoutProps) {
     setIsSearchOpen(false);
   }, []);
 
+  // Open Ask AI modal
+  const openAskAI = useCallback(() => {
+    setIsAskAIOpen(true);
+  }, []);
+
+  // Close Ask AI modal
+  const closeAskAI = useCallback(() => {
+    setIsAskAIOpen(false);
+  }, []);
+
   // Mobile menu handlers
   const openMobileMenu = useCallback(() => {
     setIsMobileMenuOpen(true);
@@ -77,23 +89,33 @@ export default function Layout({ children }: LayoutProps) {
     setIsMobileMenuOpen(false);
   }, [location.pathname]);
 
-  // Handle Command+K / Ctrl+K keyboard shortcut
+  // Handle Command+K / Ctrl+K keyboard shortcut for search
+  // Handle Command+J / Ctrl+J / Command+/ keyboard shortcut for Ask AI
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Command+K on Mac, Ctrl+K on Windows/Linux
+      // Command+K on Mac, Ctrl+K on Windows/Linux (Search)
       if ((e.metaKey || e.ctrlKey) && e.key === "k") {
         e.preventDefault();
         setIsSearchOpen((prev) => !prev);
       }
+      // Command+J or Command+/ on Mac, Ctrl+J or Ctrl+/ on Windows/Linux (Ask AI)
+      if ((e.metaKey || e.ctrlKey) && (e.key === "j" || e.key === "/")) {
+        e.preventDefault();
+        // Only toggle if Ask AI is enabled
+        if (siteConfig.askAI?.enabled && siteConfig.semanticSearch?.enabled) {
+          setIsAskAIOpen((prev) => !prev);
+        }
+      }
       // Also close on Escape
-      if (e.key === "Escape" && isSearchOpen) {
-        setIsSearchOpen(false);
+      if (e.key === "Escape") {
+        if (isSearchOpen) setIsSearchOpen(false);
+        if (isAskAIOpen) setIsAskAIOpen(false);
       }
     };
 
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [isSearchOpen]);
+  }, [isSearchOpen, isAskAIOpen]);
 
   // Check if Blog link should be shown in nav
   const showBlogInNav =
@@ -238,6 +260,17 @@ export default function Layout({ children }: LayoutProps) {
                 })}
               </div>
             )}
+          {/* Ask AI button (before search, only if enabled) */}
+          {siteConfig.askAI?.enabled && siteConfig.semanticSearch?.enabled && (
+            <button
+              onClick={openAskAI}
+              className="ask-ai-button"
+              aria-label="Ask AI (⌘J)"
+              title="Ask AI (⌘J)"
+            >
+              <Sparkle size={18} weight="bold" />
+            </button>
+          )}
           {/* Search button with icon */}
           <button
             onClick={openSearch}
@@ -293,6 +326,11 @@ export default function Layout({ children }: LayoutProps) {
 
       {/* Search modal */}
       <SearchModal isOpen={isSearchOpen} onClose={closeSearch} />
+
+      {/* Ask AI modal */}
+      {siteConfig.askAI?.enabled && siteConfig.semanticSearch?.enabled && (
+        <AskAIModal isOpen={isAskAIOpen} onClose={closeAskAI} />
+      )}
 
       {/* Scroll to top button */}
       <ScrollToTop config={scrollToTopConfig} />

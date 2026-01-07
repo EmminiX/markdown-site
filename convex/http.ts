@@ -2,6 +2,7 @@ import { httpRouter } from "convex/server";
 import { httpAction } from "./_generated/server";
 import { api } from "./_generated/api";
 import { rssFeed, rssFullFeed } from "./rss";
+import { streamResponse, streamResponseOptions } from "./askAI.node";
 
 const http = httpRouter();
 
@@ -397,6 +398,20 @@ http.route({
       return new Response("Internal server error", { status: 500 });
     }
   }),
+});
+
+// Ask AI streaming endpoint for RAG-based Q&A
+http.route({
+  path: "/ask-ai-stream",
+  method: "POST",
+  handler: streamResponse,
+});
+
+// CORS preflight for Ask AI endpoint
+http.route({
+  path: "/ask-ai-stream",
+  method: "OPTIONS",
+  handler: streamResponseOptions,
 });
 
 export default http;

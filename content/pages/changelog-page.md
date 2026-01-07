@@ -11,6 +11,68 @@ docsSectionOrder: 4
 
 All notable changes to this project.
 
+## v2.11.0
+
+Released January 6, 2026
+
+**Ask AI header button with RAG-based Q&A**
+
+New header button that opens a chat modal for asking questions about site content. Uses semantic search to find relevant posts and pages, then generates AI responses with source citations.
+
+**Features:**
+
+- Header button with sparkle icon (before search button)
+- Keyboard shortcuts: Cmd+J or Cmd+/ (Mac), Ctrl+J or Ctrl+/ (Windows/Linux)
+- Real-time streaming responses via Convex Persistent Text Streaming
+- Model selector: Claude Sonnet 4 (default) or GPT-4o
+- Markdown rendering with syntax highlighting
+- Internal links use React Router for seamless navigation
+- Source citations with links to referenced content
+- Copy response button (hover to reveal) for copying AI answers
+- Chat history within session (clears on page refresh)
+- Clear chat button to reset conversation
+
+**How it works:**
+
+1. User question is stored in database with session ID
+2. Query is converted to embedding using OpenAI text-embedding-ada-002
+3. Vector search finds top 5 relevant posts/pages
+4. Content is sent to selected AI model with RAG system prompt
+5. Response streams in real-time with source citations appended
+
+**Configuration:**
+
+Enable in `src/config/siteConfig.ts`:
+
+```typescript
+askAI: {
+  enabled: true,
+  defaultModel: "claude-sonnet-4-20250514",
+  models: [
+    { id: "claude-sonnet-4-20250514", name: "Claude Sonnet 4", provider: "anthropic" },
+    { id: "gpt-4o", name: "GPT-4o", provider: "openai" },
+  ],
+},
+```
+
+**Requirements:**
+
+- `semanticSearch.enabled: true` (for embeddings)
+- `OPENAI_API_KEY` in Convex (for embeddings)
+- `ANTHROPIC_API_KEY` in Convex (for Claude models)
+- Run `npm run sync` to generate embeddings
+
+**Technical details:**
+
+- New component: `src/components/AskAIModal.tsx`
+- New Convex files: `convex/askAI.ts` (mutations/queries), `convex/askAI.node.ts` (HTTP action)
+- New table: `askAISessions` with `by_stream` index
+- HTTP endpoint: `/ask-ai-stream` for streaming responses
+- Uses `@convex-dev/persistent-text-streaming` component
+- Separated Node.js runtime (askAI.node.ts) from regular runtime (askAI.ts)
+
+Updated files: `convex/schema.ts`, `convex/askAI.ts`, `convex/askAI.node.ts`, `convex/http.ts`, `convex/convex.config.ts`, `src/components/AskAIModal.tsx`, `src/components/Layout.tsx`, `src/config/siteConfig.ts`, `src/styles/global.css`
+
 ## v2.10.2
 
 Released January 6, 2026

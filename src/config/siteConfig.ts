@@ -250,6 +250,15 @@ export interface TwitterConfig {
   creator?: string; // @username for default content creator
 }
 
+// Ask AI configuration (Kapa-style header chat)
+// Enables a header button that opens a chat modal for asking questions about site content
+// Uses RAG (Retrieval Augmented Generation) with streaming responses
+export interface AskAIConfig {
+  enabled: boolean; // Global toggle for Ask AI feature
+  defaultModel: string; // Default model ID (e.g., "claude-sonnet-4-20250514")
+  models: AIModelOption[]; // Available models for Ask AI
+}
+
 // Social link configuration for social footer
 export interface SocialLink {
   platform:
@@ -385,6 +394,9 @@ export interface SiteConfig {
 
   // Twitter/X configuration (optional)
   twitter?: TwitterConfig;
+
+  // Ask AI configuration (optional)
+  askAI?: AskAIConfig;
 }
 
 // Default site configuration
@@ -765,19 +777,39 @@ export const siteConfig: SiteConfig = {
     ],
   },
 
-  // Semantic search configuration
-  // Set enabled: true to enable semantic search (requires OPENAI_API_KEY in Convex)
-  // When disabled, only keyword search is available (no API key needed)
-  semanticSearch: {
-    enabled: false, // Set to true to enable semantic search (requires OPENAI_API_KEY)
-  },
-
   // Twitter/X configuration for Twitter Cards
   // Set your Twitter handle for twitter:site meta tag
   // Leave empty if you don't want to include twitter:site
   twitter: {
-    site: "", // Your Twitter handle (e.g., "@yoursite")
-    creator: "", // Default creator handle
+    site: "@waynesutton", // Your Twitter handle (e.g., "@yoursite")
+    creator: "@waynesutton", // Default creator handle
+  },
+
+  // Semantic search configuration
+  // Set enabled: true to enable semantic search (requires OPENAI_API_KEY in Convex)
+  // When disabled, only keyword search is available (no API key needed)
+  semanticSearch: {
+    enabled: true, // Set to true to enable semantic search (requires OPENAI_API_KEY)
+  },
+
+  // Ask AI configuration (Kapa-style header chat)
+  // Requires semanticSearch.enabled: true for content retrieval
+  // Requires OPENAI_API_KEY (for embeddings) and ANTHROPIC_API_KEY or OPENAI_API_KEY (for LLM)
+  askAI: {
+    enabled: true, // Set to true to enable Ask AI header button
+    defaultModel: "claude-sonnet-4-20250514",
+    models: [
+      {
+        id: "claude-sonnet-4-20250514",
+        name: "Claude Sonnet 4",
+        provider: "anthropic",
+      },
+      {
+        id: "gpt-4o",
+        name: "GPT-4o",
+        provider: "openai",
+      },
+    ],
   },
 };
 
