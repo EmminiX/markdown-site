@@ -4,6 +4,21 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [2.15.3] - 2026-01-09
+
+### Fixed
+
+- Footer not displaying on `/docs` landing page when `showFooter: true` in frontmatter
+  - `DocsPage.tsx` was missing the Footer component entirely
+  - Added Footer import, footerPage query, and footer rendering logic to DocsPage.tsx
+  - Footer now respects `showFooter` frontmatter field on docs landing pages
+  - AI chat support added to DocsLayout via `aiChatEnabled` and `pageContent` props
+
+### Changed
+
+- Updated `getDocsLandingPage` query in `convex/pages.ts` to return `showFooter`, `footer`, `excerpt`, and `aiChat` fields
+- Updated `getDocsLandingPost` query in `convex/posts.ts` to return `showFooter`, `footer`, and `aiChat` fields
+
 ## [2.15.2] - 2026-01-08
 
 ### Fixed

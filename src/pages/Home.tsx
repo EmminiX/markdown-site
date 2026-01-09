@@ -170,6 +170,9 @@ export default function Home() {
             src={siteConfig.logo}
             alt={siteConfig.name}
             className="home-logo"
+            width={48}
+            height={48}
+            fetchPriority="high"
           />
         )}
         <h1 className="home-name">{siteConfig.name}</h1>

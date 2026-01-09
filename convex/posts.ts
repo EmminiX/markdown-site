@@ -977,6 +977,9 @@ export const getDocsLandingPost = query({
       authorImage: v.optional(v.string()),
       docsSectionGroup: v.optional(v.string()),
       docsSectionOrder: v.optional(v.number()),
+      showFooter: v.optional(v.boolean()),
+      footer: v.optional(v.string()),
+      aiChat: v.optional(v.boolean()),
     }),
     v.null(),
   ),
@@ -1006,6 +1009,9 @@ export const getDocsLandingPost = query({
       authorImage: landing.authorImage,
       docsSectionGroup: landing.docsSectionGroup,
       docsSectionOrder: landing.docsSectionOrder,
+      showFooter: landing.showFooter,
+      footer: landing.footer,
+      aiChat: landing.aiChat,
     };
   },
 });

@@ -5,6 +5,7 @@ import { api } from "../../convex/_generated/api";
 import DocsLayout from "../components/DocsLayout";
 import BlogPost from "../components/BlogPost";
 import CopyPageDropdown from "../components/CopyPageDropdown";
+import Footer from "../components/Footer";
 import { extractHeadings } from "../utils/extractHeadings";
 import siteConfig from "../config/siteConfig";
 import { ArrowRight } from "lucide-react";
@@ -20,6 +21,9 @@ export default function DocsPage() {
   // Fetch all docs items for fallback (first doc if no landing)
   const docsPosts = useQuery(api.posts.getDocsPosts);
   const docsPages = useQuery(api.pages.getDocsPages);
+
+  // Fetch footer content from Convex (synced via markdown)
+  const footerPage = useQuery(api.pages.getPageBySlug, { slug: "footer" });
 
   // Determine which content to use: page takes priority over post
   const landingContent = landingPage || landingPost;
@@ -76,7 +80,12 @@ export default function DocsPage() {
           : undefined;
 
     return (
-      <DocsLayout headings={headings} currentSlug={landingContent.slug}>
+      <DocsLayout
+        headings={headings}
+        currentSlug={landingContent.slug}
+        aiChatEnabled={landingContent.aiChat}
+        pageContent={landingContent.content}
+      >
         <article className="docs-article">
           <div className="docs-article-actions">
             <CopyPageDropdown
@@ -103,6 +112,15 @@ export default function DocsPage() {
             slug={landingContent.slug}
             pageType={"date" in landingContent ? "post" : "page"}
           />
+          {/* Footer - respects showFooter frontmatter field */}
+          {siteConfig.footer.enabled &&
+            (landingContent.showFooter !== undefined
+              ? landingContent.showFooter
+              : "date" in landingContent
+                ? siteConfig.footer.showOnPosts
+                : siteConfig.footer.showOnPages) && (
+              <Footer content={landingContent.footer || footerPage?.content} />
+            )}
         </article>
       </DocsLayout>
     );

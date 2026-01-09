@@ -11,6 +11,35 @@ docsSectionOrder: 4
 
 All notable changes to this project.
 
+## v2.15.3
+
+Released January 9, 2026
+
+**Footer not displaying on /docs landing page fix**
+
+Fixed an issue where the footer was not displaying on the `/docs` landing page even when `showFooter: true` was set in the frontmatter. The `DocsPage.tsx` component (which handles the `/docs` route with `docsLanding: true`) was missing the Footer component entirely.
+
+**Fixes:**
+
+- Added Footer component to DocsPage.tsx
+- Footer now respects `showFooter` frontmatter field on docs landing pages
+- Added AI chat support to docs landing page via `aiChatEnabled` and `pageContent` props
+
+**Technical:**
+
+- Added `Footer` import and `footerPage` query to fetch footer content
+- Added footer rendering logic after BlogPost component (same pattern as Post.tsx)
+- Updated `getDocsLandingPage` query in `convex/pages.ts` to return `showFooter`, `footer`, `excerpt`, and `aiChat` fields
+- Updated `getDocsLandingPost` query in `convex/posts.ts` to return `showFooter`, `footer`, and `aiChat` fields
+
+**Files changed:**
+
+- `src/pages/DocsPage.tsx` - Added Footer component and rendering logic
+- `convex/pages.ts` - Updated getDocsLandingPage query return fields
+- `convex/posts.ts` - Updated getDocsLandingPost query return fields
+
+---
+
 ## v2.15.2
 
 Released January 8, 2026

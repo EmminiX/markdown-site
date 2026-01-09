@@ -4,9 +4,17 @@
 
 ## Current Status
 
-v2.15.1 ready. Additional Core Web Vitals CLS and INP improvements.
+v2.15.3 ready. Fixed footer not displaying on docs landing page.
 
 ## Completed
+
+- [x] Footer not displaying on /docs landing page fix (v2.15.3)
+  - [x] DocsPage.tsx was missing Footer component entirely
+  - [x] Added Footer import and footerPage query to DocsPage.tsx
+  - [x] Added footer rendering logic after BlogPost (same pattern as Post.tsx)
+  - [x] Updated getDocsLandingPage query to return showFooter, footer, excerpt, aiChat fields
+  - [x] Updated getDocsLandingPost query to return showFooter, footer, aiChat fields
+  - [x] Added aiChatEnabled and pageContent props to DocsLayout
 
 - [x] Additional Core Web Vitals CLS and INP improvements (v2.15.1)
   - [x] Added aspect-ratio to blog images and header images to prevent layout shift

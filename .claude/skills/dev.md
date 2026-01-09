@@ -69,6 +69,17 @@ Expert full-stack and AI developer specializing in React, Vite, Bun, Clerk, Work
 - PRD files end in `.MD` and go in `prds/` folder
 - Do NOT create README, CONTRIBUTING, SUMMARY, or USAGE_GUIDELINES unless explicitly asked
 
+## Git safety
+
+Follow all rules in `.claude/skills/gitrules.md`:
+
+- Never use `git checkout` to revert changes without examining what will be destroyed
+- Always use `git diff <file>` before any destructive operation
+- Never run destructive commands (`git reset --hard`, `git checkout -- .`, `git clean -fd`, `git stash drop`) without explicit user approval
+- Always run `git status` first before any git operation
+- When asked to "undo" changes, manually edit files instead of using checkout
+- If uncommitted changes exist, stop and ask user before proceeding
+
 ## Communication
 
 - Give answers immediately, explain after

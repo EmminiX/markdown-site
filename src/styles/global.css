@@ -12941,6 +12941,7 @@ body {
   min-height: calc(100vh - 60px);
   margin: 0;
   padding: 0;
+  contain: layout style; /* CLS fix: isolate layout recalculations */
 }
 
 /* Docs layout without TOC (two-column) */
@@ -12948,19 +12949,19 @@ body {
   /* Same as default - sidebars are fixed */
 }
 
-/* Left sidebar for docs navigation - flush left */
+/* Left sidebar for docs navigation - flush left, full height */
 .docs-sidebar-left {
   position: fixed;
-  top: 20px;
+  top: 0;
+  bottom: 0;
   left: 0;
   width: 280px;
-  height: calc(100vh - 80px);
+  height: 100%;
   overflow-y: auto;
   background-color: var(--bg-sidebar);
   padding: 24px;
+  padding-top: 32px;
   border-right: 1px solid var(--border-sidebar);
-  border-radius: 6px;
-  border-top: 1px solid var(--border-sidebar);
   z-index: 10;
 }
 
@@ -12981,19 +12982,19 @@ body {
   background-color: var(--text-muted);
 }
 
-/* Right sidebar for table of contents - flush right */
+/* Right sidebar for table of contents - flush right, full height */
 .docs-sidebar-right {
   position: fixed;
-  top: 20px;
+  top: 0;
+  bottom: 0;
   right: 0;
   width: 280px;
-  height: calc(100vh - 80px);
+  height: 100%;
   overflow-y: auto;
   background-color: var(--bg-sidebar);
   padding: 24px;
+  padding-top: 32px;
   border-left: 1px solid var(--border-sidebar);
-  border-radius: 6px;
-  border-top: 1px solid var(--border-sidebar);
   z-index: 10;
 }
 
