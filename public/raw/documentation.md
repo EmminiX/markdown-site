@@ -25,6 +25,11 @@ Reference documentation for setting up, customizing, and deploying this markdown
 - <span class="copy-command">npm run sync:discovery:prod</span> - Update discovery files
 - <span class="copy-command">npm run sync:all:prod</span> - Sync content + discovery files together
 
+**Export dashboard content:**
+
+- <span class="copy-command">npm run export:db</span> - Export dashboard posts/pages to content folders (development)
+- <span class="copy-command">npm run export:db:prod</span> - Export dashboard posts/pages (production)
+
 ## Quick start
 
 ```bash

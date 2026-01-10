@@ -19,7 +19,7 @@ agents. -->
 
 **AI agent integration** — API endpoints, raw markdown files, skills.md and MCP server included.
 
-**File-based publishing** — Write markdown locally, run `npm run sync`, content syncs everywhere.
+**File-based publishing** — Write markdown locally, content syncs everywhere with version control.
 
 **URL content import** — Import urls to scrape any webpage into markdown with Firecrawl.
 

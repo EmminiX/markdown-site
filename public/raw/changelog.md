@@ -7,6 +7,34 @@ Date: 2026-01-10
 
 All notable changes to this project.
 
+## v2.16.1
+
+Released January 10, 2026
+
+**Docs layout scrollbar hiding**
+
+Hidden scrollbars on the docs section layout while preserving scroll functionality. Cleaner UI that matches the design without visible scrollbars.
+
+**Fixes:**
+
+- Left sidebar scrolls but no scrollbar visible
+- Right sidebar scrolls but no scrollbar visible
+- Main docs content scrolls but no scrollbar visible
+- No browser page scrollbar on docs pages
+- Scrolling works via trackpad, mouse wheel, and touch
+
+**Technical:**
+
+- Added `body:has(.docs-layout) { overflow: hidden; }` to prevent page-level scroll
+- Added scrollbar hiding rules for `.docs-sidebar-left`, `.docs-sidebar-right`, `.docs-content`
+- Cross-browser support: `-ms-overflow-style: none` (IE/Edge), `scrollbar-width: none` (Firefox), `::-webkit-scrollbar { width: 0 }` (Chrome/Safari)
+
+**Files changed:**
+
+- `src/styles/global.css` - Added scrollbar hiding rules and body overflow rule
+
+---
+
 ## v2.16.0
 
 Released January 9, 2026

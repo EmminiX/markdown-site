@@ -108,6 +108,7 @@ Follow the step-by-step guide in `FORK_CONFIG.md` to update each file manually. 
 - Homepage post limit with optional "read more" link
 - Blog page featured layout with hero post
 - Show image at top of posts/pages
+- Version control with 3-day history for posts and pages (diff view, one-click restore)
 
 ### SEO and Discovery
 
@@ -171,6 +172,7 @@ See [How to Use the MCP Server](https://www.markdown.fast/how-to-use-mcp-server)
 The framework includes a centralized dashboard at `/dashboard` for managing content and configuring your site. Features include:
 
 - Content management: Edit posts and pages with live preview
+- Version control: View history, compare diffs, restore previous versions (3-day retention)
 - Sync commands: Run sync operations from the browser
 - Site configuration: Configure all settings via UI
 - Newsletter management: Integrated subscriber and email management

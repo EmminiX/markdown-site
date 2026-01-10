@@ -12932,6 +12932,11 @@ body {
    Docs Section Layout (Starlight-style)
    ============================================ */
 
+/* Prevent page-level scrolling on docs pages - only internal columns scroll */
+body:has(.docs-layout) {
+  overflow: hidden;
+}
+
 /* Three-column docs layout - full width */
 /* Sidebars are position: fixed, so no grid needed */
 /* DOM order: main content first (for SEO - H1 before sidebar H3), then sidebars */
@@ -12949,7 +12954,7 @@ body {
   /* Same as default - sidebars are fixed */
 }
 
-/* Left sidebar for docs navigation - flush left, full height */
+/* Left sidebar for docs navigation - flush left, full height, scrolls independently */
 .docs-sidebar-left {
   position: fixed;
   top: 0;
@@ -12958,8 +12963,14 @@ body {
   width: 280px;
   height: 100%;
   overflow-y: auto;
+  overscroll-behavior: contain; /* Prevent scroll chaining to parent */
   background-color: var(--bg-sidebar);
   padding: 24px;
+  /*
+   * DO NOT REMOVE: padding-top, border-radius, border-top, border-right
+   * These styles provide visual separation and consistent spacing.
+   * Removing them breaks the docs layout design.
+   */
   padding-top: 20px;
   border-radius: 6px;
   border-top: 1px solid var(--border-sidebar);
@@ -12984,7 +12995,7 @@ body {
   background-color: var(--text-muted);
 }
 
-/* Right sidebar for table of contents - flush right, full height */
+/* Right sidebar for table of contents - flush right, full height, scrolls independently */
 .docs-sidebar-right {
   position: fixed;
   top: 0;
@@ -12993,7 +13004,13 @@ body {
   width: 280px;
   height: 100%;
   overflow-y: auto;
+  overscroll-behavior: contain; /* Prevent scroll chaining to parent */
   background-color: var(--bg-sidebar);
+  /*
+   * DO NOT REMOVE: padding-top, border-radius, border-top, border-left
+   * These styles provide visual separation and consistent spacing.
+   * Removing them breaks the docs layout design.
+   */
   padding: 24px;
   padding-top: 20px;
   border-radius: 6px;
@@ -13017,6 +13034,21 @@ body {
 
 .docs-sidebar-right::-webkit-scrollbar-thumb:hover {
   background-color: var(--text-muted);
+}
+
+/* Hide scrollbars but keep scroll functionality */
+.docs-sidebar-left,
+.docs-sidebar-right,
+.docs-content {
+  -ms-overflow-style: none; /* IE/old Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.docs-sidebar-left::-webkit-scrollbar,
+.docs-sidebar-right::-webkit-scrollbar,
+.docs-content::-webkit-scrollbar {
+  width: 0;
+  height: 0;
 }
 
 /* AI Chat section in docs right sidebar */
@@ -13094,13 +13126,16 @@ body {
   max-height: 80px;
 }
 
-/* Main content area - uses margins for fixed sidebars */
+/* Main content area - uses margins for fixed sidebars, scrolls independently */
 .docs-content {
-  margin-left: 280px;
-  margin-right: 280px;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 280px;
+  right: 280px;
   padding: 32px 48px;
   overflow-y: auto;
-  min-height: calc(100vh - 80px);
+  overscroll-behavior: contain; /* Prevent scroll chaining to parent */
 }
 
 /* Center the article within docs-content */
@@ -13112,7 +13147,7 @@ body {
 
 /* No TOC layout - content takes more space (no right sidebar) */
 .docs-layout.no-toc .docs-content {
-  margin-right: 0;
+  right: 0;
 }
 
 /* Docs sidebar navigation */
@@ -13496,7 +13531,7 @@ body {
   }
 
   .docs-content {
-    margin-right: 0;
+    right: 0;
   }
 }
 
@@ -13507,7 +13542,7 @@ body {
   }
 
   .docs-content {
-    margin-left: 240px;
+    left: 240px;
     padding: 24px 32px;
   }
 }
@@ -13526,8 +13561,9 @@ body {
   }
 
   .docs-content {
-    margin-left: 0;
-    margin-right: 0;
+    position: static;
+    left: auto;
+    right: auto;
     padding: 20px 16px;
     min-height: auto;
   }

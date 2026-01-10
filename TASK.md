@@ -4,9 +4,16 @@
 
 ## Current Status
 
-v2.16.0 ready. Added version control system for posts and pages.
+v2.16.1 ready. Docs layout scrollbar hiding for cleaner UI.
 
 ## Completed
+
+- [x] Docs layout scrollbar hiding (v2.16.1)
+  - [x] Hidden scrollbars on left sidebar, right sidebar, and main docs content
+  - [x] Added body:has(.docs-layout) to prevent page-level scrolling
+  - [x] Cross-browser support (IE/Edge, Firefox, Chrome/Safari)
+  - [x] Scrolling still works via trackpad, wheel, and touch
+  - [x] Updated files.md, changelog.md, task.md, changelog-page.md
 
 - [x] Version control system (v2.16.0)
   - [x] Added contentVersions and versionControlSettings tables to schema

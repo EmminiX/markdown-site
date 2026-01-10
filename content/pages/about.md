@@ -6,13 +6,15 @@ order: 2
 excerpt: "An open-source publishing framework built for AI agents and developers to ship websites, docs, or blogs."
 ---
 
-An open-source publishing framework built for AI agents and developers to ship websites, docs, or blogs. Write markdown, sync from the terminal. Your content is instantly available to browsers, LLMs, and AI agents. Built on Convex and Netlify.
+An open-source publishing framework built for AI agents and developers to ship websites, docs, or blogs. Two ways to publish: write markdown and sync from the terminal, or use the web dashboard. Your content is instantly available to browsers, LLMs, and AI agents. Built on Convex and Netlify.
 
 ## What makes it a dev sync system?
 
-**File-based content.** All posts and pages live in `content/blog/` and `content/pages/` as markdown files with frontmatter. No database UI. No admin panel. Just files in your repo.
+**File-based content.** Posts and pages live in `content/blog/` and `content/pages/` as markdown files with frontmatter. Version controlled in your repo. The dashboard provides a web UI for creating and editing content directly in the database.
 
 **CLI publishing workflow.** Write markdown locally, then run `npm run sync` (dev) or `npm run sync:prod` (production). Content appears instantly via Convex real-time sync. Images require git commit and push since they are served as static files from Netlify.
+
+**Dashboard workflow.** Create and edit content at `/dashboard` without touching files. Dashboard content saves directly to the database with `source: "dashboard"` tracking. Export to markdown files with `npm run export:db` when needed.
 
 **Sync commands:**
 
@@ -28,6 +30,11 @@ An open-source publishing framework built for AI agents and developers to ship w
 - <span class="copy-command">npm run sync:discovery:prod</span> - Update discovery files
 - <span class="copy-command">npm run sync:all:prod</span> - Sync content + discovery files together
 
+**Export dashboard content:**
+
+- <span class="copy-command">npm run export:db</span> - Export dashboard posts/pages to content folders (development)
+- <span class="copy-command">npm run export:db:prod</span> - Export dashboard posts/pages (production)
+
 **Version controlled.** Markdown source files live in your repo alongside code. Commit changes, review diffs, roll back like any codebase. The sync command pushes content to the database.
 
 ```bash
@@ -38,7 +45,7 @@ npm run sync        # dev
 npm run sync:prod   # production
 ```
 
-**No admin interface.** No web UI for creating or editing content. You use your code editor and terminal.
+**Dual source architecture.** File-synced content (`source: "sync"`) and dashboard content (`source: "dashboard"`) coexist. Neither overwrites the other. Use whichever workflow fits your needs.
 
 ## The real-time twist
 
@@ -117,6 +124,14 @@ It's a hybrid: developer workflow for publishing + real-time delivery like a dyn
 - Newsletter signup forms on homepage, blog page, and posts
 - Contact forms on pages/posts via frontmatter with AgentMail delivery
 - Email notifications for new subscribers and weekly stats
+
+**Version control:**
+
+- 3-day version history for posts and pages (similar to Obsidian Sync)
+- Automatic snapshots before every content change (sync or dashboard edit)
+- Side-by-side diff view to compare versions
+- One-click restore with automatic backup of current version
+- Toggle to enable/disable via dashboard settings
 
 **Developer and AI agent support:**
 

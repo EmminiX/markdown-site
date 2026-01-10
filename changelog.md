@@ -4,6 +4,23 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [2.16.1] - 2026-01-10
+
+### Fixed
+
+- Docs layout scrollbar hiding for cleaner UI
+  - Hidden scrollbars on left sidebar, right sidebar, and main docs content
+  - Scrolling still works via trackpad, mouse wheel, and touch
+  - Added `body:has(.docs-layout)` to prevent page-level scrolling on docs pages
+  - Cross-browser support: `-ms-overflow-style: none` (IE/Edge), `scrollbar-width: none` (Firefox), `::-webkit-scrollbar { width: 0 }` (Chrome/Safari)
+
+### Technical
+
+- Updated `src/styles/global.css`:
+  - Added `body:has(.docs-layout) { overflow: hidden; }` rule
+  - Added scrollbar hiding rules for `.docs-sidebar-left`, `.docs-sidebar-right`, `.docs-content`
+  - Existing scrollbar thumb/track styles remain but are invisible with width: 0
+
 ## [2.16.0] - 2026-01-09
 
 ### Added
