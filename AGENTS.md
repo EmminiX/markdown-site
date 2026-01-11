@@ -16,13 +16,13 @@ Your content is instantly available to browsers, LLMs, and AI agents.. Write mar
 
 ## Current Status
 
-- **Site Name**: markdown 
+- **Site Name**: markdown sync
 - **Site Title**: markdown sync framework
 - **Site URL**: https://yoursite.example.com
 - **Total Posts**: 19
 - **Total Pages**: 4
 - **Latest Post**: 2026-01-10
-- **Last Updated**: 2026-01-10T23:49:21.881Z
+- **Last Updated**: 2026-01-11T08:12:05.341Z
 
 ## Tech stack
 
