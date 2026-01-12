@@ -4,6 +4,61 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [2.20.1] - 2026-01-11
+
+### Added
+
+- True delete for AI generated images in Dashboard AI Agent
+  - Delete button with confirmation dialog replaces clear button
+  - Removes image from both `aiGeneratedImages` table and Convex Storage
+  - Added `by_storageId` index to `aiGeneratedImages` table for efficient lookup
+  - Added `deleteGeneratedImage` mutation to `aiChats.ts`
+
+### Technical
+
+- Updated `convex/schema.ts` with `by_storageId` index on `aiGeneratedImages` table
+- Added `deleteGeneratedImage` mutation in `convex/aiChats.ts`
+- Updated `AIAgentSection` in Dashboard.tsx with delete confirmation modal
+- Added delete button styles and confirmation dialog CSS in global.css
+- Removed unused "Save to Media Library" feature (users can download and re-upload)
+
+## [2.20.0] - 2026-01-11
+
+### Added
+
+- Dashboard frontmatter field synchronization
+  - All 30+ frontmatter fields now sync between Dashboard UI and schema
+  - Posts and pages editor supports all available frontmatter options
+  - ContentItem interface updated with 19 new fields
+  - postFrontmatterFields and pageFrontmatterFields arrays fully aligned
+
+- Sync warning modal for synced content
+  - Warning displayed when editing content created via `npm run sync`
+  - Explains that local file changes will overwrite dashboard edits
+  - Download button to save markdown file before editing
+  - Copy button to copy markdown to clipboard
+  - "Save Anyway" option for intentional edits
+  - Dashboard-created content (`source: "dashboard"`) bypasses warning
+
+- RC1 release blog post at /version-rc1
+  - Documents semantic search, ConvexFS Media Library, OpenCode integration
+  - Covers Ask AI, version control, and npx create-markdown-sync CLI
+
+### Fixed
+
+- Missing `unlisted` field in sync-posts.ts PostFrontmatter interface
+
+### Technical
+
+- Updated `ContentItem` interface in Dashboard.tsx with showImageAtTop, showInNav, readTime, layout, rightSidebar, aiChat, blogFeatured, newsletter, contactForm, unlisted, showFooter, footer, showSocialFooter, textAlign, docsSection, docsSectionGroup, docsSectionOrder, docsSectionGroupOrder, docsSectionGroupIcon, docsLanding, source
+- Updated `postFrontmatterFields` array with all post-specific fields
+- Updated `pageFrontmatterFields` array with all page-specific fields
+- Created `SyncWarningModal` component in Dashboard.tsx
+- Added `doSavePost` and `doSavePage` internal save functions
+- Added `syncWarningModal` state for modal control
+- Added `handleSyncWarningDownload`, `handleSyncWarningCopy`, `handleSaveAnywayFromModal` handlers
+- Added CSS styles for sync warning modal in global.css
+
 ## [2.19.0] - 2026-01-10
 
 ### Added

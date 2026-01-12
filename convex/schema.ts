@@ -189,7 +189,8 @@ export default defineSchema({
     createdAt: v.number(), // Timestamp when image was generated
   })
     .index("by_session", ["sessionId"])
-    .index("by_createdAt", ["createdAt"]),
+    .index("by_createdAt", ["createdAt"])
+    .index("by_storageId", ["storageId"]),
 
   // Newsletter subscribers table
   // Stores email subscriptions with unsubscribe tokens

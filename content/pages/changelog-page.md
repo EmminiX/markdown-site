@@ -11,6 +11,60 @@ docsSectionOrder: 4
 
 All notable changes to this project.
 
+## v2.20.1
+
+Released January 11, 2026
+
+**True delete for AI generated images**
+
+Added proper delete functionality for AI generated images in the Dashboard AI Agent section. The clear button has been replaced with a delete button that shows a confirmation dialog before permanently removing the image from both the database and Convex Storage.
+
+**Changes:**
+
+- Delete button with confirmation dialog in AI Agent image generation
+- Removes image from `aiGeneratedImages` table and Convex Storage
+- Added `by_storageId` index for efficient image lookup
+- Added `deleteGeneratedImage` mutation to aiChats.ts
+- Removed Save to Media Library feature (users can download and re-upload instead)
+
+**Files changed:**
+
+- `convex/schema.ts` - Added by_storageId index to aiGeneratedImages table
+- `convex/aiChats.ts` - Added deleteGeneratedImage mutation
+- `src/pages/Dashboard.tsx` - Updated AIAgentSection with delete button and confirmation modal
+- `src/styles/global.css` - Added delete button and confirmation dialog styles
+
+---
+
+## v2.20.0
+
+Released January 11, 2026
+
+**Dashboard frontmatter synchronization**
+
+All 30+ frontmatter fields now sync between the Dashboard UI and the database schema. Posts and pages editors support every available frontmatter option including docs section fields, layout options, and feature toggles.
+
+**Sync warning modal for synced content**
+
+Added a warning modal when editing content that was created via `npm run sync`. The modal explains that local file changes will overwrite dashboard edits on the next sync. Users can download or copy the markdown before editing, or choose "Save Anyway" for intentional edits. Dashboard-created content bypasses this warning.
+
+**Changes:**
+
+- Updated ContentItem interface with 19 new frontmatter fields
+- Updated postFrontmatterFields and pageFrontmatterFields arrays to match schema
+- Added SyncWarningModal component with download/copy options
+- Fixed missing `unlisted` field in sync-posts.ts PostFrontmatter interface
+- Created RC1 release blog post documenting major features
+
+**Files changed:**
+
+- `src/pages/Dashboard.tsx` - ContentItem interface, frontmatter arrays, SyncWarningModal, save handlers
+- `src/styles/global.css` - Sync warning modal styles
+- `scripts/sync-posts.ts` - Added unlisted field to PostFrontmatter interface
+- `content/blog/version-rc1.md` - RC1 release announcement
+
+---
+
 ## v2.19.0
 
 Released January 10, 2026

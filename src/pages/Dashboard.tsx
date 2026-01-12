@@ -416,6 +416,174 @@ function ConfirmDeleteModal({
   );
 }
 
+// Sync Warning modal component - warns when saving synced content
+interface SyncWarningModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onSaveAnyway: () => void;
+  onDownload: () => void;
+  onCopy: () => void;
+  itemName: string;
+  itemType: "post" | "page";
+  isSaving: boolean;
+}
+
+function SyncWarningModal({
+  isOpen,
+  onClose,
+  onSaveAnyway,
+  onDownload,
+  onCopy,
+  itemName,
+  itemType,
+  isSaving,
+}: SyncWarningModalProps) {
+  const [copied, setCopied] = useState(false);
+  const [downloaded, setDownloaded] = useState(false);
+
+  const handleCopy = async () => {
+    await onCopy();
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleDownload = () => {
+    onDownload();
+    setDownloaded(true);
+    setTimeout(() => setDownloaded(false), 2000);
+  };
+
+  const handleBackdropClick = (e: React.MouseEvent) => {
+    if (e.target === e.currentTarget && !isSaving) {
+      onClose();
+    }
+  };
+
+  useEffect(() => {
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && !isSaving) {
+        onClose();
+      }
+    };
+    if (isOpen) {
+      document.addEventListener("keydown", handleEsc);
+    }
+    return () => document.removeEventListener("keydown", handleEsc);
+  }, [isOpen, onClose, isSaving]);
+
+  // Reset states when modal closes
+  useEffect(() => {
+    if (!isOpen) {
+      setCopied(false);
+      setDownloaded(false);
+    }
+  }, [isOpen]);
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="dashboard-modal-backdrop" onClick={handleBackdropClick}>
+      <div className="dashboard-modal dashboard-modal-sync-warning">
+        <div className="dashboard-modal-header">
+          <div className="dashboard-modal-icon dashboard-modal-icon-warning">
+            <Warning size={24} weight="fill" />
+          </div>
+          <h3 className="dashboard-modal-title">Synced Content Warning</h3>
+          <button
+            className="dashboard-modal-close"
+            onClick={onClose}
+            disabled={isSaving}
+          >
+            <X size={18} weight="bold" />
+          </button>
+        </div>
+
+        <div className="dashboard-modal-content">
+          <p className="dashboard-modal-message">
+            This {itemType} was synced from a local markdown file.
+          </p>
+          <div className="dashboard-modal-item-name">
+            <FileText size={18} />
+            <span>{itemName}</span>
+          </div>
+          <p className="dashboard-modal-warning-text">
+            Changes saved here will be <strong>overwritten</strong> on the next{" "}
+            <code>npm run sync</code>. To persist your changes, download or copy
+            the markdown and update your local file.
+          </p>
+          <div className="dashboard-modal-sync-actions">
+            <button
+              className={`dashboard-modal-action-btn ${downloaded ? "success" : ""}`}
+              onClick={handleDownload}
+              disabled={isSaving}
+              title="Download as .md file"
+            >
+              {downloaded ? (
+                <>
+                  <Check size={16} weight="bold" />
+                  <span>Downloaded</span>
+                </>
+              ) : (
+                <>
+                  <Download size={16} />
+                  <span>Download .md</span>
+                </>
+              )}
+            </button>
+            <button
+              className={`dashboard-modal-action-btn ${copied ? "success" : ""}`}
+              onClick={handleCopy}
+              disabled={isSaving}
+              title="Copy markdown to clipboard"
+            >
+              {copied ? (
+                <>
+                  <Check size={16} weight="bold" />
+                  <span>Copied</span>
+                </>
+              ) : (
+                <>
+                  <CopySimple size={16} />
+                  <span>Copy Markdown</span>
+                </>
+              )}
+            </button>
+          </div>
+        </div>
+
+        <div className="dashboard-modal-footer">
+          <div className="dashboard-modal-actions">
+            <button
+              className="dashboard-modal-btn secondary"
+              onClick={onClose}
+              disabled={isSaving}
+            >
+              Cancel
+            </button>
+            <button
+              className="dashboard-modal-btn warning"
+              onClick={onSaveAnyway}
+              disabled={isSaving}
+            >
+              {isSaving ? (
+                <>
+                  <SpinnerGap size={16} className="animate-spin" />
+                  <span>Saving...</span>
+                </>
+              ) : (
+                <>
+                  <FloppyDisk size={16} />
+                  <span>Save Anyway</span>
+                </>
+              )}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // Dashboard sections
 type DashboardSection =
   | "posts"
@@ -451,63 +619,112 @@ interface ContentItem {
   featuredOrder?: number;
   excerpt?: string;
   image?: string;
+  showImageAtTop?: boolean;
   authorName?: string;
   authorImage?: string;
   order?: number;
+  showInNav?: boolean;
+  readTime?: string;
+  layout?: string;
+  rightSidebar?: boolean;
+  aiChat?: boolean;
+  blogFeatured?: boolean;
+  newsletter?: boolean;
+  contactForm?: boolean;
+  unlisted?: boolean;
+  showFooter?: boolean;
+  footer?: string;
+  showSocialFooter?: boolean;
+  textAlign?: string;
+  docsSection?: boolean;
+  docsSectionGroup?: string;
+  docsSectionOrder?: number;
+  docsSectionGroupOrder?: number;
+  docsSectionGroupIcon?: string;
+  docsLanding?: boolean;
   source?: "dashboard" | "sync";
 }
 
 // Frontmatter fields for posts
 const postFrontmatterFields = [
+  // Required fields
   { key: "title", label: "Title", type: "text", required: true },
-  {
-    key: "description",
-    label: "Description",
-    type: "textarea",
-    required: true,
-  },
+  { key: "description", label: "Description", type: "textarea", required: true },
   { key: "date", label: "Date", type: "date", required: true },
   { key: "slug", label: "Slug", type: "text", required: true },
   { key: "published", label: "Published", type: "checkbox", required: true },
   { key: "tags", label: "Tags", type: "tags", required: true },
+  // Display options
   { key: "featured", label: "Featured", type: "checkbox", required: false },
-  {
-    key: "featuredOrder",
-    label: "Featured Order",
-    type: "number",
-    required: false,
-  },
+  { key: "featuredOrder", label: "Featured Order", type: "number", required: false },
+  { key: "blogFeatured", label: "Blog Featured", type: "checkbox", required: false },
+  { key: "unlisted", label: "Unlisted", type: "checkbox", required: false },
+  // Content options
   { key: "excerpt", label: "Excerpt", type: "textarea", required: false },
   { key: "image", label: "Image URL", type: "text", required: false },
+  { key: "showImageAtTop", label: "Show Image at Top", type: "checkbox", required: false },
+  { key: "readTime", label: "Read Time", type: "text", required: false },
+  // Author
   { key: "authorName", label: "Author Name", type: "text", required: false },
-  {
-    key: "authorImage",
-    label: "Author Image URL",
-    type: "text",
-    required: false,
-  },
+  { key: "authorImage", label: "Author Image URL", type: "text", required: false },
+  // Layout options
+  { key: "layout", label: "Layout", type: "select", options: ["", "sidebar"], required: false },
+  { key: "rightSidebar", label: "Right Sidebar", type: "checkbox", required: false },
+  { key: "aiChat", label: "AI Chat", type: "checkbox", required: false },
+  // Footer options
+  { key: "showFooter", label: "Show Footer", type: "checkbox", required: false },
+  { key: "footer", label: "Footer Content", type: "textarea", required: false },
+  { key: "showSocialFooter", label: "Show Social Footer", type: "checkbox", required: false },
+  // Features
+  { key: "newsletter", label: "Newsletter", type: "checkbox", required: false },
+  { key: "contactForm", label: "Contact Form", type: "checkbox", required: false },
+  // Docs section
+  { key: "docsSection", label: "Docs Section", type: "checkbox", required: false },
+  { key: "docsSectionGroup", label: "Docs Group", type: "text", required: false },
+  { key: "docsSectionOrder", label: "Docs Order", type: "number", required: false },
+  { key: "docsSectionGroupOrder", label: "Docs Group Order", type: "number", required: false },
+  { key: "docsSectionGroupIcon", label: "Docs Group Icon", type: "text", required: false },
+  { key: "docsLanding", label: "Docs Landing", type: "checkbox", required: false },
 ];
 
 // Frontmatter fields for pages
 const pageFrontmatterFields = [
+  // Required fields
   { key: "title", label: "Title", type: "text", required: true },
   { key: "slug", label: "Slug", type: "text", required: true },
   { key: "published", label: "Published", type: "checkbox", required: true },
+  // Navigation
   { key: "order", label: "Nav Order", type: "number", required: false },
+  { key: "showInNav", label: "Show in Nav", type: "checkbox", required: false },
+  // Display options
   { key: "featured", label: "Featured", type: "checkbox", required: false },
-  {
-    key: "featuredOrder",
-    label: "Featured Order",
-    type: "number",
-    required: false,
-  },
+  { key: "featuredOrder", label: "Featured Order", type: "number", required: false },
+  // Content options
+  { key: "excerpt", label: "Excerpt", type: "textarea", required: false },
+  { key: "image", label: "Image URL", type: "text", required: false },
+  { key: "showImageAtTop", label: "Show Image at Top", type: "checkbox", required: false },
+  { key: "textAlign", label: "Text Align", type: "select", options: ["left", "center", "right"], required: false },
+  // Author
   { key: "authorName", label: "Author Name", type: "text", required: false },
-  {
-    key: "authorImage",
-    label: "Author Image URL",
-    type: "text",
-    required: false,
-  },
+  { key: "authorImage", label: "Author Image URL", type: "text", required: false },
+  // Layout options
+  { key: "layout", label: "Layout", type: "select", options: ["", "sidebar"], required: false },
+  { key: "rightSidebar", label: "Right Sidebar", type: "checkbox", required: false },
+  { key: "aiChat", label: "AI Chat", type: "checkbox", required: false },
+  // Footer options
+  { key: "showFooter", label: "Show Footer", type: "checkbox", required: false },
+  { key: "footer", label: "Footer Content", type: "textarea", required: false },
+  { key: "showSocialFooter", label: "Show Social Footer", type: "checkbox", required: false },
+  // Features
+  { key: "newsletter", label: "Newsletter", type: "checkbox", required: false },
+  { key: "contactForm", label: "Contact Form", type: "checkbox", required: false },
+  // Docs section
+  { key: "docsSection", label: "Docs Section", type: "checkbox", required: false },
+  { key: "docsSectionGroup", label: "Docs Group", type: "text", required: false },
+  { key: "docsSectionOrder", label: "Docs Order", type: "number", required: false },
+  { key: "docsSectionGroupOrder", label: "Docs Group Order", type: "number", required: false },
+  { key: "docsSectionGroupIcon", label: "Docs Group Icon", type: "text", required: false },
+  { key: "docsLanding", label: "Docs Landing", type: "checkbox", required: false },
 ];
 
 // Loading state component for auth
@@ -714,6 +931,14 @@ function DashboardContent() {
     item: ContentItem | null;
   }>({ isOpen: false, id: "", title: "", type: "post", item: null });
   const [isDeleting, setIsDeleting] = useState(false);
+
+  // Sync warning modal state (for saving synced content)
+  const [syncWarningModal, setSyncWarningModal] = useState<{
+    isOpen: boolean;
+    item: ContentItem | null;
+    type: "post" | "page";
+  }>({ isOpen: false, item: null, type: "post" });
+  const [isSavingWithWarning, setIsSavingWithWarning] = useState(false);
 
   // Sync server state
   const [syncOutput, setSyncOutput] = useState<string>("");
@@ -959,8 +1184,8 @@ function DashboardContent() {
     }
   }, [deleteModal, deletePostMutation, deletePageMutation, addToast]);
 
-  // Handle saving post changes
-  const handleSavePost = useCallback(
+  // Internal function to save post (called after warning or directly for dashboard content)
+  const doSavePost = useCallback(
     async (item: ContentItem) => {
       try {
         await updatePostMutation({
@@ -974,10 +1199,28 @@ function DashboardContent() {
             tags: item.tags,
             excerpt: item.excerpt,
             image: item.image,
+            showImageAtTop: item.showImageAtTop,
+            readTime: item.readTime,
             featured: item.featured,
             featuredOrder: item.featuredOrder,
+            blogFeatured: item.blogFeatured,
+            unlisted: item.unlisted,
             authorName: item.authorName,
             authorImage: item.authorImage,
+            layout: item.layout,
+            rightSidebar: item.rightSidebar,
+            aiChat: item.aiChat,
+            showFooter: item.showFooter,
+            footer: item.footer,
+            showSocialFooter: item.showSocialFooter,
+            newsletter: item.newsletter,
+            contactForm: item.contactForm,
+            docsSection: item.docsSection,
+            docsSectionGroup: item.docsSectionGroup,
+            docsSectionOrder: item.docsSectionOrder,
+            docsSectionGroupOrder: item.docsSectionGroupOrder,
+            docsSectionGroupIcon: item.docsSectionGroupIcon,
+            docsLanding: item.docsLanding,
           },
         });
         addToast("Post saved successfully", "success");
@@ -991,8 +1234,8 @@ function DashboardContent() {
     [updatePostMutation, addToast],
   );
 
-  // Handle saving page changes
-  const handleSavePage = useCallback(
+  // Internal function to save page (called after warning or directly for dashboard content)
+  const doSavePage = useCallback(
     async (item: ContentItem) => {
       try {
         await updatePageMutation({
@@ -1002,12 +1245,29 @@ function DashboardContent() {
             content: item.content,
             published: item.published,
             order: item.order,
+            showInNav: item.showInNav,
             excerpt: item.excerpt,
             image: item.image,
+            showImageAtTop: item.showImageAtTop,
             featured: item.featured,
             featuredOrder: item.featuredOrder,
             authorName: item.authorName,
             authorImage: item.authorImage,
+            layout: item.layout,
+            rightSidebar: item.rightSidebar,
+            aiChat: item.aiChat,
+            showFooter: item.showFooter,
+            footer: item.footer,
+            showSocialFooter: item.showSocialFooter,
+            newsletter: item.newsletter,
+            contactForm: item.contactForm,
+            textAlign: item.textAlign,
+            docsSection: item.docsSection,
+            docsSectionGroup: item.docsSectionGroup,
+            docsSectionOrder: item.docsSectionOrder,
+            docsSectionGroupOrder: item.docsSectionGroupOrder,
+            docsSectionGroupIcon: item.docsSectionGroupIcon,
+            docsLanding: item.docsLanding,
           },
         });
         addToast("Page saved successfully", "success");
@@ -1020,6 +1280,60 @@ function DashboardContent() {
     },
     [updatePageMutation, addToast],
   );
+
+  // Handle saving post - shows warning if synced content
+  const handleSavePost = useCallback(
+    async (item: ContentItem) => {
+      // Check if this is synced content (not created in dashboard)
+      if (item.source === "sync" || !item.source) {
+        // Show warning modal
+        setSyncWarningModal({ isOpen: true, item, type: "post" });
+      } else {
+        // Dashboard-created content, save directly
+        await doSavePost(item);
+      }
+    },
+    [doSavePost],
+  );
+
+  // Handle saving page - shows warning if synced content
+  const handleSavePage = useCallback(
+    async (item: ContentItem) => {
+      // Check if this is synced content (not created in dashboard)
+      if (item.source === "sync" || !item.source) {
+        // Show warning modal
+        setSyncWarningModal({ isOpen: true, item, type: "page" });
+      } else {
+        // Dashboard-created content, save directly
+        await doSavePage(item);
+      }
+    },
+    [doSavePage],
+  );
+
+  // Close sync warning modal
+  const closeSyncWarningModal = useCallback(() => {
+    if (!isSavingWithWarning) {
+      setSyncWarningModal({ isOpen: false, item: null, type: "post" });
+    }
+  }, [isSavingWithWarning]);
+
+  // Handle "Save Anyway" from sync warning modal
+  const handleSaveAnywayFromModal = useCallback(async () => {
+    if (!syncWarningModal.item) return;
+
+    setIsSavingWithWarning(true);
+    try {
+      if (syncWarningModal.type === "post") {
+        await doSavePost(syncWarningModal.item);
+      } else {
+        await doSavePage(syncWarningModal.item);
+      }
+      setSyncWarningModal({ isOpen: false, item: null, type: "post" });
+    } finally {
+      setIsSavingWithWarning(false);
+    }
+  }, [syncWarningModal, doSavePost, doSavePage]);
 
   // Generate markdown content from item
   const generateMarkdown = useCallback(
@@ -1082,6 +1396,31 @@ function DashboardContent() {
     await navigator.clipboard.writeText(markdown);
     addToast("Markdown copied to clipboard", "success");
   }, [editingItem, editingType, generateMarkdown, addToast]);
+
+  // Generate markdown for sync warning modal download/copy
+  const handleSyncWarningDownload = useCallback(() => {
+    if (!syncWarningModal.item) return;
+
+    const markdown = generateMarkdown(syncWarningModal.item, syncWarningModal.type);
+    const blob = new Blob([markdown], { type: "text/markdown" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${syncWarningModal.item.slug}.md`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    addToast(`Downloaded ${syncWarningModal.item.slug}.md`, "success");
+  }, [syncWarningModal, generateMarkdown, addToast]);
+
+  const handleSyncWarningCopy = useCallback(async () => {
+    if (!syncWarningModal.item) return;
+
+    const markdown = generateMarkdown(syncWarningModal.item, syncWarningModal.type);
+    await navigator.clipboard.writeText(markdown);
+    addToast("Markdown copied to clipboard", "success");
+  }, [syncWarningModal, generateMarkdown, addToast]);
 
   // Navigation items for left sidebar
   // Filter items based on feature configuration
@@ -1223,6 +1562,18 @@ function DashboardContent() {
         itemName={deleteModal.title}
         itemType={deleteModal.type}
         isDeleting={isDeleting}
+      />
+
+      {/* Sync Warning Modal - warns when saving synced content */}
+      <SyncWarningModal
+        isOpen={syncWarningModal.isOpen}
+        onClose={closeSyncWarningModal}
+        onSaveAnyway={handleSaveAnywayFromModal}
+        onDownload={handleSyncWarningDownload}
+        onCopy={handleSyncWarningCopy}
+        itemName={syncWarningModal.item?.title || ""}
+        itemType={syncWarningModal.type}
+        isSaving={isSavingWithWarning}
       />
 
       {/* Left Sidebar */}
@@ -3281,13 +3632,16 @@ function AIAgentSection() {
   const [aspectRatio, setAspectRatio] = useState<"1:1" | "16:9" | "9:16" | "4:3" | "3:4">("1:1");
   const [imagePrompt, setImagePrompt] = useState("");
   const [isGeneratingImage, setIsGeneratingImage] = useState(false);
-  const [generatedImage, setGeneratedImage] = useState<{ url: string; prompt: string } | null>(null);
+  const [generatedImage, setGeneratedImage] = useState<{ url: string; prompt: string; storageId: Id<"_storage"> } | null>(null);
   const [imageError, setImageError] = useState<string | null>(null);
   const [showImageModelDropdown, setShowImageModelDropdown] = useState(false);
   const [showTextModelDropdown, setShowTextModelDropdown] = useState(false);
   const [copiedFormat, setCopiedFormat] = useState<"md" | "html" | null>(null);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [isDeletingImage, setIsDeletingImage] = useState(false);
 
   const generateImage = useAction(api.aiImageGeneration.generateImage);
+  const deleteGeneratedImage = useMutation(api.aiChats.deleteGeneratedImage);
 
   const textModels = siteConfig.aiDashboard?.textModels || [
     { id: "claude-sonnet-4-20250514", name: "Claude Sonnet 4", provider: "anthropic" as const },
@@ -3313,8 +3667,8 @@ function AIAgentSection() {
         aspectRatio,
       });
 
-      if (result.success && result.url) {
-        setGeneratedImage({ url: result.url, prompt: imagePrompt });
+      if (result.success && result.url && result.storageId) {
+        setGeneratedImage({ url: result.url, prompt: imagePrompt, storageId: result.storageId });
         setImagePrompt("");
       } else if (result.error) {
         setImageError(result.error);
@@ -3323,6 +3677,22 @@ function AIAgentSection() {
       setImageError(error instanceof Error ? error.message : "Failed to generate image");
     } finally {
       setIsGeneratingImage(false);
+    }
+  };
+
+  // Handle delete image from database
+  const handleDeleteImage = async () => {
+    if (!generatedImage) return;
+
+    setIsDeletingImage(true);
+    try {
+      await deleteGeneratedImage({ storageId: generatedImage.storageId });
+      setGeneratedImage(null);
+      setShowDeleteConfirm(false);
+    } catch (error) {
+      console.error("Failed to delete image:", error);
+    } finally {
+      setIsDeletingImage(false);
     }
   };
 
@@ -3513,14 +3883,47 @@ function AIAgentSection() {
                   <span>{copiedFormat === "html" ? "Copied" : "HTML"}</span>
                 </button>
                 <button
-                  className="ai-image-action-btn clear"
-                  onClick={() => setGeneratedImage(null)}
-                  title="Clear image"
+                  className="ai-image-action-btn delete"
+                  onClick={() => setShowDeleteConfirm(true)}
+                  title="Delete image from database"
                 >
                   <Trash size={16} />
-                  <span>Clear</span>
+                  <span>Delete</span>
                 </button>
               </div>
+
+              {/* Delete Confirmation */}
+              {showDeleteConfirm && (
+                <div className="ai-image-delete-confirm">
+                  <p>Delete this image from the database?</p>
+                  <div className="ai-image-delete-actions">
+                    <button
+                      className="ai-image-confirm-btn cancel"
+                      onClick={() => setShowDeleteConfirm(false)}
+                      disabled={isDeletingImage}
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      className="ai-image-confirm-btn confirm"
+                      onClick={handleDeleteImage}
+                      disabled={isDeletingImage}
+                    >
+                      {isDeletingImage ? (
+                        <>
+                          <SpinnerGap size={14} className="animate-spin" />
+                          <span>Deleting...</span>
+                        </>
+                      ) : (
+                        <>
+                          <Trash size={14} />
+                          <span>Delete</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
+                </div>
+              )}
 
               {/* Code Preview */}
               <div className="ai-image-code-preview">

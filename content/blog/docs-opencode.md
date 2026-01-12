@@ -11,7 +11,7 @@ showInNav: false
 layout: "sidebar"
 featuredOrder: 6
 featured: true
-blogFeatured: true
+blogFeatured: false
 rightSidebar: true
 showImageAtTop: false
 image: /images/opencode.png

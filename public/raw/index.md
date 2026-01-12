@@ -2,7 +2,7 @@
 
 The open-source markdown publishing framework for developers and AI agents to ship **[docs](/docs)**, or **[blogs](/blog)** or **[websites](/)** that's always in sync.
 
-**[Fork it](https://github.com/waynesutton/markdown-site)** or **<span class="copy-command">npx create-markdown-sync my-site</span>**, customize it, ship it.
+**[Fork it](https://github.com/waynesutton/markdown-site)** or [npm](https://www.npmjs.com/package/create-markdown-sync) **<span class="copy-command">npx create-markdown-sync my-site</span>**, customize it, ship it.
 
 <!-- This is a comments
 Your content is instantly available to browsers, LLMs, and AI
@@ -34,8 +34,10 @@ agents. -->
 
 ---
 
-## Blog Posts (20)
+## Blog Posts (21)
 
+- **[Markdown Sync RC1 Release](/raw/version-rc1.md)** - RC1 brings semantic search, ConvexFS Media Library, OpenCode integration, RAG-based AI Q&A, and a new CLI to get started in seconds.
+  - Date: 2026-01-11 | Reading time: 3 min read | Tags: release, rc1, features, convex, ai
 - **[OpenCode Integration](/raw/docs-opencode.md)** - This framework includes full OpenCode support with agents, commands, skills, and plugins.
   - Date: 2026-01-10 | Reading time: 4 min read | Tags: opencode, plugins, terminal
 - **[How to Use Code Blocks](/raw/how-to-use-code-blocks.md)** - A guide to syntax highlighting, diff rendering, and code formatting in your markdown posts.
@@ -99,7 +101,7 @@ agents. -->
 
 ---
 
-**Total Content:** 20 posts, 17 pages
+**Total Content:** 21 posts, 17 pages
 
 All content is available as raw markdown files at `/raw/{slug}.md`
 

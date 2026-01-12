@@ -4,9 +4,30 @@
 
 ## Current Status
 
-v2.19.0 ready. npx create-markdown-sync CLI.
+v2.20.1 ready. AI generated image true delete with confirmation dialog.
 
 ## Completed
+
+- [x] AI generated image true delete with confirmation (v2.20.1)
+  - [x] Added `by_storageId` index to `aiGeneratedImages` table in schema.ts
+  - [x] Added `deleteGeneratedImage` mutation to aiChats.ts
+  - [x] Updated Dashboard AIAgentSection with delete button and confirmation dialog
+  - [x] Added CSS styles for delete button and confirmation modal
+  - [x] Removed Save to Media Library feature (users can download and re-upload)
+
+- [x] Dashboard frontmatter synchronization and sync warning modal (v2.20.0)
+  - [x] Updated ContentItem interface with 19 new frontmatter fields
+  - [x] Updated postFrontmatterFields array with all post-specific fields
+  - [x] Updated pageFrontmatterFields array with all page-specific fields
+  - [x] Updated handleSavePost to include all frontmatter fields
+  - [x] Updated handleSavePage to include all frontmatter fields
+  - [x] Added SyncWarningModal component for synced content warning
+  - [x] Added download and copy buttons to warning modal
+  - [x] Added "Save Anyway" option for intentional edits
+  - [x] Dashboard-created content bypasses warning
+  - [x] Fixed missing unlisted field in sync-posts.ts PostFrontmatter interface
+  - [x] Added CSS styles for sync warning modal
+  - [x] Created RC1 release blog post at /version-rc1
 
 - [x] npx create-markdown-sync CLI (v2.19.0)
   - [x] Created packages/create-markdown-sync/ monorepo package

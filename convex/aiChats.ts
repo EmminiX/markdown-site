@@ -411,3 +411,29 @@ export const getRecentImagesInternal = internalQuery({
   },
 });
 
+/**
+ * Delete a generated image from database and storage
+ */
+export const deleteGeneratedImage = mutation({
+  args: {
+    storageId: v.id("_storage"),
+  },
+  returns: v.object({ success: v.boolean() }),
+  handler: async (ctx, args) => {
+    // Find and delete from aiGeneratedImages table
+    const image = await ctx.db
+      .query("aiGeneratedImages")
+      .withIndex("by_storageId", (q) => q.eq("storageId", args.storageId))
+      .first();
+
+    if (image) {
+      await ctx.db.delete(image._id);
+    }
+
+    // Delete from Convex Storage
+    await ctx.storage.delete(args.storageId);
+
+    return { success: true };
+  },
+});
+

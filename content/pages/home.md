@@ -9,7 +9,7 @@ textAlign: "left"
 
 The open-source markdown publishing framework for developers and AI agents to ship **[docs](/docs)**, or **[blogs](/blog)** or **[websites](/)** that's always in sync.
 
-**[Fork it](https://github.com/waynesutton/markdown-site)** or **<span class="copy-command">npx create-markdown-sync my-site</span>**, customize it, ship it.
+**[Fork it](https://github.com/waynesutton/markdown-site)** or [npm](https://www.npmjs.com/package/create-markdown-sync) **<span class="copy-command">npx create-markdown-sync my-site</span>**, customize it, ship it.
 
 <!-- This is a comments
 Your content is instantly available to browsers, LLMs, and AI
