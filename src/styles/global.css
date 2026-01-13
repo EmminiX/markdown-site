@@ -1368,7 +1368,7 @@ body {
 /* Post page article title */
 .post-header .post-title {
   font-size: var(--font-size-post-title);
-  font-weight: 300;
+  font-weight: 600;
   letter-spacing: -0.02em;
   margin-bottom: 0;
   line-height: 1.2;
@@ -1438,7 +1438,7 @@ body {
 
 .blog-h1 {
   font-size: var(--font-size-blog-h1);
-  font-weight: 300;
+  font-weight: 600;
   margin: 48px 0 24px;
   letter-spacing: -0.02em;
   line-height: 1.3;
@@ -1449,7 +1449,7 @@ body {
 /* This is an H2 element with H1 visual styling, used for SEO (single H1 per page) */
 .blog-h1-demoted {
   font-size: var(--font-size-blog-h1);
-  font-weight: 300;
+  font-weight: 600;
   margin: 48px 0 24px;
   letter-spacing: -0.02em;
   line-height: 1.3;
@@ -1463,7 +1463,7 @@ body {
 
 .blog-h2 {
   font-size: var(--font-size-blog-h2);
-  font-weight: 300;
+  font-weight: 500;
   margin: 40px 0 20px;
   letter-spacing: -0.01em;
   line-height: 1.3;
@@ -8578,7 +8578,7 @@ body {
 
 .dashboard-auth-card h1 {
   margin-top: 0;
-  font-weight: 300;
+  font-weight: 600;
   margin-bottom: 1rem;
 }
 
@@ -9526,7 +9526,7 @@ body {
 
 .dashboard-preview-content h1 {
   font-size: 2rem;
-  font-weight: 700;
+  font-weight: 600;
   margin-bottom: 1rem;
   color: var(--text-primary);
 }
@@ -10366,7 +10366,9 @@ body:has(.dashboard-layout) {
   color: var(--text-primary);
   font-size: var(--font-size-sm);
   cursor: pointer;
-  transition: background 0.15s, border-color 0.15s;
+  transition:
+    background 0.15s,
+    border-color 0.15s;
 }
 
 .ai-image-action-btn:hover {
@@ -10436,7 +10438,9 @@ body:has(.dashboard-layout) {
   font-size: var(--font-size-sm);
   font-weight: 500;
   cursor: pointer;
-  transition: background 0.15s, border-color 0.15s;
+  transition:
+    background 0.15s,
+    border-color 0.15s;
 }
 
 .ai-image-confirm-btn.cancel {
@@ -11299,7 +11303,7 @@ body:has(.dashboard-layout) {
 
 .dashboard-quill-container .ql-editor h1 {
   font-size: 1.75rem;
-  font-weight: 700;
+  font-weight: 600;
   margin: 1.5rem 0 0.75rem;
   line-height: 1.2;
 }
@@ -12233,7 +12237,9 @@ body:has(.dashboard-layout) {
   font-size: var(--font-size-sm);
   font-weight: 500;
   cursor: pointer;
-  transition: background 0.15s ease, border-color 0.15s ease;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease;
 }
 
 .dashboard-modal-copy-btn:hover:not(:disabled) {
@@ -12312,7 +12318,10 @@ body:has(.dashboard-layout) {
   font-size: var(--font-size-sm);
   font-weight: 500;
   cursor: pointer;
-  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
 }
 
 .dashboard-modal-action-btn:hover:not(:disabled) {
@@ -14046,7 +14055,7 @@ body:has(.docs-layout) {
 .docs-article-title {
   margin: 0 0 12px;
   font-size: var(--font-size-post-title);
-  font-weight: 300;
+  font-weight: 600;
   letter-spacing: -0.02em;
   color: var(--text-primary);
   line-height: 1.2;

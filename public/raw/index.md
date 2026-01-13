@@ -28,10 +28,6 @@ agents. -->
 
 **Ask AI** - Chat with your site content. Get answers with sources.
 
-```
-
-```
-
 ---
 
 ## Blog Posts (21)

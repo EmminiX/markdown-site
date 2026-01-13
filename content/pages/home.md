@@ -34,7 +34,3 @@ agents. -->
 **Semantic search** - Find content by meaning, not just keywords.
 
 **Ask AI** - Chat with your site content. Get answers with sources.
-
-```
-
-```
